@@ -109,6 +109,24 @@ export const WikiGame: React.FC = () => {
     }
   }, [gameState, articles, isLoading]);
 
+  // Handle moving to the next article
+  const moveToNextArticle = useCallback(() => {
+    if (!isLoading && gameState.currentArticleIndex < articles.length - 1) {
+      setTimeout(() => {
+        handleNavigate(gameState.currentArticleIndex + 1);
+      }, 1500);
+    } else if (
+      !isLoading &&
+      gameState.currentArticleIndex === articles.length - 1
+    ) {
+      // If it's the last article, mark the game as completed
+      setGameState((prev) => ({
+        ...prev,
+        gameCompleted: true,
+      }));
+    }
+  }, [isLoading, gameState.currentArticleIndex, articles.length]);
+
   // Memoize handlers to prevent recreation on each render
   const handleLinkClick = useCallback(
     (linkId: string, isMistake: boolean) => {
@@ -129,6 +147,14 @@ export const WikiGame: React.FC = () => {
         if (isMistake) {
           // Award 5 points for clicking the correct mistake
           updatedScores[prev.currentArticleIndex] = 5;
+        } else {
+          // Mark the mistake for this article as clicked to prevent future attempts
+          // This effectively counts a wrong link as a "miss" for this article
+          const mistakeLink = currentArticle.links[currentArticle.mistakeIndex];
+          if (mistakeLink) {
+            updatedClickedLinks[mistakeLink.id] = true;
+          }
+          // Keep score as 0 for this article
         }
 
         return {
@@ -155,15 +181,36 @@ export const WikiGame: React.FC = () => {
           });
         }
       } else {
-        // If they clicked a correct link, show a toast
+        // If they clicked a correct link, show a toast and count it as a miss
         toast({
-          title: "Not a mistake",
-          description: "This link is correct. Keep looking for the mistake!",
+          title: "Incorrect",
+          description: "That wasn't the mistake. Moving to the next article.",
           variant: "destructive",
         });
+
+        // Get the actual mistake link to show what was missed
+        const mistakeLink = currentArticle.links[currentArticle.mistakeIndex];
+        if (mistakeLink) {
+          setTimeout(() => {
+            toast({
+              title: "The actual mistake was",
+              description: `"${mistakeLink.text}" should have been "${mistakeLink.correctAnswer}"`,
+              variant: "default",
+            });
+          }, 800);
+        }
+
+        // Move to the next article
+        moveToNextArticle();
       }
     },
-    [isLoading, articles, gameState.currentArticleIndex, toast],
+    [
+      isLoading,
+      articles,
+      gameState.currentArticleIndex,
+      toast,
+      moveToNextArticle,
+    ],
   );
 
   const handleSubmitCorrection = useCallback(
@@ -200,7 +247,7 @@ export const WikiGame: React.FC = () => {
       setDialogOpen(false);
       setCurrentMistakeLink(null);
 
-      // Show toast with feedback - always show the correct answer
+      // Show toast with feedback
       toast({
         title: isCorrect ? "Correct! +5 points" : "Not quite right",
         description: isCorrect
@@ -209,32 +256,16 @@ export const WikiGame: React.FC = () => {
         variant: isCorrect ? "default" : "destructive",
       });
 
-      // Handle navigation in a timeout to avoid render phase issues
-      if (!isLoading) {
-        const allArticlesAttempted = articles.every((article) => {
-          if (!article.links || article.mistakeIndex === undefined)
-            return false;
-          const mistakeLink = article.links[article.mistakeIndex];
-          return mistakeLink && gameState.clickedLinks[mistakeLink.id];
-        });
-
-        if (
-          !allArticlesAttempted &&
-          gameState.currentArticleIndex < articles.length - 1
-        ) {
-          setTimeout(() => {
-            handleNavigate(gameState.currentArticleIndex + 1);
-          }, 1500);
-        }
-      }
+      // Move to next article
+      moveToNextArticle();
     },
     [
       currentMistakeLink,
       isLoading,
       articles,
       gameState.currentArticleIndex,
-      gameState.clickedLinks,
       toast,
+      moveToNextArticle,
     ],
   );
 
@@ -293,8 +324,11 @@ export const WikiGame: React.FC = () => {
       const articleIndex = articles.findIndex((a) => a.id === article.id);
       const score = gameState.scores[articleIndex];
 
-      // Change to show partial (yellow) for finding mistake but not correct answer
+      // Yellow for finding mistake but not correct answer
       if (score === 5) return "partial";
+      // Red for clicking a wrong link (score is 0 but link is marked as clicked)
+      else if (score === 0) return "incorrect";
+      // Green for both finding mistake and correct answer
       return score === 10 ? "correct" : "incorrect";
     });
 
