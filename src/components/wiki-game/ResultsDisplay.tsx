@@ -11,7 +11,7 @@ interface ResultsDisplayProps {
 export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
-  const [resultText, setResultText] = useState("");
+  const [showResultText, setShowResultText] = useState(false);
 
   const getResultEmoji = (result: GameResult): string => {
     switch (result) {
@@ -34,9 +34,6 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
   const copyToClipboard = () => {
     try {
       const shareText = generateShareText();
-
-      // Always show the text for copying (since direct clipboard access is restricted)
-      setResultText(shareText);
 
       // Use the execCommand approach instead of Clipboard API
       const textArea = document.createElement("textarea");
@@ -69,7 +66,8 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
           throw new Error("Copy command failed");
         }
       } catch (err) {
-        // If execCommand fails, at least we have the text visible
+        // If execCommand fails, show the text for manual copying
+        setShowResultText(true);
         toast({
           title: "Copy to clipboard unavailable",
           description: "Please manually select and copy the text below.",
@@ -80,7 +78,8 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
       }
     } catch (err) {
       console.error("Failed to copy text: ", err);
-      // Show a toast with instructions for manual copying
+      // Show the text for manual copying and show a toast with instructions
+      setShowResultText(true);
       toast({
         title: "Could not copy automatically",
         description: "Please select and copy the text below.",
@@ -104,7 +103,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
         ))}
       </div>
 
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center">
         <Button
           onClick={copyToClipboard}
           className="flex items-center gap-2 px-4 py-2"
@@ -119,16 +118,17 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
         </Button>
       </div>
 
-      {/* Always show the text for manual copying */}
-      <div className="mt-4 relative">
-        <pre className="p-3 bg-gray-100 rounded text-left overflow-x-auto text-sm whitespace-pre-wrap">
-          {resultText || generateShareText()}
-        </pre>
-        <p className="text-xs text-gray-500 mt-1">
-          If automatic copying doesn't work, please select and copy the text
-          above.
-        </p>
-      </div>
+      {/* Only show the text area when copying fails */}
+      {showResultText && (
+        <div className="mt-4 relative">
+          <pre className="p-3 bg-gray-100 rounded text-left overflow-x-auto text-sm whitespace-pre-wrap">
+            {generateShareText()}
+          </pre>
+          <p className="text-xs text-gray-500 mt-1">
+            Please select and copy the text above.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
