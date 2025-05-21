@@ -30,20 +30,57 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
   }, [results]);
 
   const copyToClipboard = async () => {
-    const shareText = generateShareText();
-
     try {
-      await navigator.clipboard.writeText(shareText);
-      toast({
-        title: "Results copied to clipboard!",
-        description: "You can now paste and share your results.",
-      });
+      const shareText = generateShareText();
+
+      // Use the newer clipboard API
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(shareText);
+        toast({
+          title: "Results copied to clipboard!",
+          description: "You can now paste and share your results.",
+        });
+      } else {
+        // Fallback for older browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = shareText;
+
+        // Make the textarea out of viewport
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+
+        textArea.focus();
+        textArea.select();
+
+        const successful = document.execCommand("copy");
+        document.body.removeChild(textArea);
+
+        if (successful) {
+          toast({
+            title: "Results copied to clipboard!",
+            description: "You can now paste and share your results.",
+          });
+        } else {
+          throw new Error("Copy command was unsuccessful");
+        }
+      }
     } catch (err) {
+      console.error("Failed to copy text: ", err);
       toast({
         title: "Could not copy to clipboard",
-        description: "Please try again or copy manually.",
+        description:
+          "Please try manually selecting and copying the results below.",
         variant: "destructive",
       });
+
+      // Show the results as text for manual copy
+      const resultsContainer = document.getElementById("results-text");
+      if (resultsContainer) {
+        resultsContainer.textContent = generateShareText();
+        resultsContainer.style.display = "block";
+      }
     }
   };
 
@@ -63,11 +100,21 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
       </div>
 
       <div className="flex justify-center">
-        <Button onClick={copyToClipboard} className="flex items-center gap-2">
+        <Button
+          onClick={copyToClipboard}
+          className="flex items-center gap-2 px-4 py-2"
+          variant="default"
+        >
           <Copy className="h-4 w-4" />
           Copy Results
         </Button>
       </div>
+
+      {/* Hidden pre-formatted text for fallback manual copying */}
+      <pre
+        id="results-text"
+        className="mt-4 p-3 bg-gray-100 rounded text-left overflow-x-auto hidden"
+      ></pre>
     </div>
   );
 };
