@@ -33,6 +33,7 @@ export const WikiGame: React.FC = () => {
   const [currentMistakeLink, setCurrentMistakeLink] = useState<Link | null>(
     null,
   );
+  const [isLoading, setIsLoading] = useState(true);
 
   // Initialize game with today's articles and load any saved progress
   useEffect(() => {
@@ -50,29 +51,46 @@ export const WikiGame: React.FC = () => {
 
     // Try to load saved state
     try {
+      // Force a reset of stored data due to format changes
+      localStorage.removeItem(getGameStorageKey());
+
       const savedState = localStorage.getItem(getGameStorageKey());
       if (savedState) {
-        setGameState(JSON.parse(savedState));
+        const parsedState = JSON.parse(savedState);
+        // Verify the saved state format matches our current expected format
+        if (
+          parsedState.clickedLinks !== undefined &&
+          parsedState.enteredCorrections !== undefined &&
+          Array.isArray(parsedState.scores) &&
+          parsedState.scores.length === todayArticles.length
+        ) {
+          setGameState(parsedState);
+        } else {
+          // Use default state if saved state format doesn't match
+          setGameState(defaultState);
+        }
       } else {
         setGameState(defaultState);
       }
     } catch (err) {
       console.error("Error loading saved game state:", err);
       setGameState(defaultState);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
   // Save game state to localStorage whenever it changes
   useEffect(() => {
-    if (articles.length > 0) {
+    if (articles.length > 0 && !isLoading) {
       localStorage.setItem(getGameStorageKey(), JSON.stringify(gameState));
     }
-  }, [gameState, articles]);
+  }, [gameState, articles, isLoading]);
 
   // Check if all articles have been completed
   useEffect(() => {
-    if (articles.length > 0) {
-      const allMistakesFound = articles.every((article, index) => {
+    if (articles.length > 0 && !isLoading) {
+      const allMistakesFound = articles.every((article) => {
         const mistakeLink = article.links[article.mistakeIndex];
         return gameState.clickedLinks[mistakeLink.id] || false;
       });
@@ -84,9 +102,11 @@ export const WikiGame: React.FC = () => {
         }));
       }
     }
-  }, [gameState.clickedLinks, articles]);
+  }, [gameState.clickedLinks, articles, isLoading]);
 
   const handleLinkClick = (linkId: string, isMistake: boolean) => {
+    if (isLoading) return;
+
     const currentArticle = articles[gameState.currentArticleIndex];
 
     // Update state to mark link as clicked
@@ -136,7 +156,7 @@ export const WikiGame: React.FC = () => {
   };
 
   const handleSubmitCorrection = (correction: string) => {
-    if (!currentMistakeLink) return;
+    if (!currentMistakeLink || isLoading) return;
 
     const currentArticle = articles[gameState.currentArticleIndex];
     const isCorrect =
@@ -175,22 +195,26 @@ export const WikiGame: React.FC = () => {
     });
 
     // Navigate to next article automatically if not the last one
-    const allArticlesAttempted = articles.every((article, index) => {
-      const mistakeLink = article.links[article.mistakeIndex];
-      return gameState.clickedLinks[mistakeLink.id] || false;
-    });
+    if (!isLoading) {
+      const allArticlesAttempted = articles.every((article) => {
+        const mistakeLink = article.links[article.mistakeIndex];
+        return gameState.clickedLinks[mistakeLink.id] || false;
+      });
 
-    if (
-      !allArticlesAttempted &&
-      gameState.currentArticleIndex < articles.length - 1
-    ) {
-      setTimeout(() => {
-        handleNavigate(gameState.currentArticleIndex + 1);
-      }, 1500);
+      if (
+        !allArticlesAttempted &&
+        gameState.currentArticleIndex < articles.length - 1
+      ) {
+        setTimeout(() => {
+          handleNavigate(gameState.currentArticleIndex + 1);
+        }, 1500);
+      }
     }
   };
 
   const handleNavigate = (index: number) => {
+    if (isLoading) return;
+
     setGameState((prev) => ({
       ...prev,
       currentArticleIndex: index,
@@ -198,6 +222,8 @@ export const WikiGame: React.FC = () => {
   };
 
   const resetGame = () => {
+    if (isLoading) return;
+
     const defaultState: GameState = {
       currentArticleIndex: 0,
       clickedLinks: {},
@@ -216,10 +242,20 @@ export const WikiGame: React.FC = () => {
   };
 
   const getGameResults = (): GameResults => {
+    if (isLoading || articles.length === 0) {
+      return {
+        date: new Date().toISOString().split("T")[0],
+        results: [],
+        score: 0,
+        maxScore: 0,
+      };
+    }
+
     const results: GameResult[] = articles.map((article) => {
       const mistakeLink = article.links[article.mistakeIndex];
-      const mistakeLinkId = mistakeLink.id;
+      if (!mistakeLink) return "unattempted";
 
+      const mistakeLinkId = mistakeLink.id;
       if (!gameState.clickedLinks[mistakeLinkId]) return "unattempted";
 
       const articleIndex = articles.findIndex((a) => a.id === article.id);
@@ -238,7 +274,7 @@ export const WikiGame: React.FC = () => {
   };
 
   // Don't render until articles are loaded
-  if (articles.length === 0) {
+  if (isLoading || articles.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
         Loading challenge...
@@ -249,11 +285,6 @@ export const WikiGame: React.FC = () => {
   const currentArticle = articles[gameState.currentArticleIndex];
   const totalScore = gameState.scores.reduce((sum, score) => sum + score, 0);
   const maxScore = getMaxScore(articles);
-
-  // Check if the current article's mistake has been found
-  const mistakeLink = currentArticle.links[currentArticle.mistakeIndex];
-  const mistakeLinkId = mistakeLink.id;
-  const mistakeFound = gameState.clickedLinks[mistakeLinkId] || false;
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -282,9 +313,13 @@ export const WikiGame: React.FC = () => {
         articles={articles}
         currentIndex={gameState.currentArticleIndex}
         scores={gameState.scores}
-        clickedMistakes={articles.map((article, index) => {
+        clickedMistakes={articles.map((article) => {
+          if (!article.links || article.mistakeIndex === undefined)
+            return false;
           const mistakeLink = article.links[article.mistakeIndex];
-          return gameState.clickedLinks[mistakeLink.id] || false;
+          return (
+            (mistakeLink && gameState.clickedLinks[mistakeLink.id]) || false
+          );
         })}
         enteredCorrections={articles.map(
           (article) => gameState.enteredCorrections[article.id] || "",
