@@ -1,6 +1,6 @@
 # Wikipedia Challenge Game
 
-A fun daily puzzle game where players spot mistakes in Wikipedia-style articles.
+A daily puzzle game of spotting mistakes in Wikipedia-style articles. Become the editor Wikipedia doesn't really need.
 
 ![Wikipedia Challenge Screenshot](./public/screenshot.png)
 
