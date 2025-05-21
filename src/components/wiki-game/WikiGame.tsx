@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Article as ArticleComponent } from "./Article";
 import { MistakeDialog } from "./MistakeDialog";
 import { GameProgress } from "./GameProgress";
@@ -37,62 +37,60 @@ export const WikiGame: React.FC = () => {
 
   // Initialize game with today's articles and load any saved progress
   useEffect(() => {
-    const todayArticles = getArticlesForToday();
-    setArticles(todayArticles);
+    const initializeGame = () => {
+      const todayArticles = getArticlesForToday();
+      setArticles(todayArticles);
 
-    // Initialize default game state
-    const defaultState: GameState = {
-      currentArticleIndex: 0,
-      clickedLinks: {},
-      enteredCorrections: {},
-      scores: Array(todayArticles.length).fill(0),
-      gameCompleted: false,
-    };
+      // Initialize default game state
+      const defaultState: GameState = {
+        currentArticleIndex: 0,
+        clickedLinks: {},
+        enteredCorrections: {},
+        scores: Array(todayArticles.length).fill(0),
+        gameCompleted: false,
+      };
 
-    // Try to load saved state
-    try {
-      // Force a reset of stored data due to format changes
-      localStorage.removeItem(getGameStorageKey());
+      // Try to load saved state
+      try {
+        // Force a reset of stored data due to format changes
+        localStorage.removeItem(getGameStorageKey());
 
-      const savedState = localStorage.getItem(getGameStorageKey());
-      if (savedState) {
-        const parsedState = JSON.parse(savedState);
-        // Verify the saved state format matches our current expected format
-        if (
-          parsedState.clickedLinks !== undefined &&
-          parsedState.enteredCorrections !== undefined &&
-          Array.isArray(parsedState.scores) &&
-          parsedState.scores.length === todayArticles.length
-        ) {
-          setGameState(parsedState);
+        const savedState = localStorage.getItem(getGameStorageKey());
+        if (savedState) {
+          const parsedState = JSON.parse(savedState);
+          // Verify the saved state format matches our current expected format
+          if (
+            parsedState.clickedLinks !== undefined &&
+            parsedState.enteredCorrections !== undefined &&
+            Array.isArray(parsedState.scores) &&
+            parsedState.scores.length === todayArticles.length
+          ) {
+            setGameState(parsedState);
+          } else {
+            // Use default state if saved state format doesn't match
+            setGameState(defaultState);
+          }
         } else {
-          // Use default state if saved state format doesn't match
           setGameState(defaultState);
         }
-      } else {
+      } catch (err) {
+        console.error("Error loading saved game state:", err);
         setGameState(defaultState);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.error("Error loading saved game state:", err);
-      setGameState(defaultState);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    initializeGame();
   }, []);
 
-  // Save game state to localStorage whenever it changes
-  useEffect(() => {
-    if (articles.length > 0 && !isLoading) {
-      localStorage.setItem(getGameStorageKey(), JSON.stringify(gameState));
-    }
-  }, [gameState, articles, isLoading]);
-
-  // Check if all articles have been completed
+  // Check if all articles have been completed - moved to separate effect to avoid render phase state updates
   useEffect(() => {
     if (articles.length > 0 && !isLoading) {
       const allMistakesFound = articles.every((article) => {
+        if (!article.links || article.mistakeIndex === undefined) return false;
         const mistakeLink = article.links[article.mistakeIndex];
-        return gameState.clickedLinks[mistakeLink.id] || false;
+        return mistakeLink && gameState.clickedLinks[mistakeLink.id];
       });
 
       if (allMistakesFound && !gameState.gameCompleted) {
@@ -102,42 +100,60 @@ export const WikiGame: React.FC = () => {
         }));
       }
     }
-  }, [gameState.clickedLinks, articles, isLoading]);
+  }, [gameState.clickedLinks, articles, isLoading, gameState.gameCompleted]);
 
-  const handleLinkClick = (linkId: string, isMistake: boolean) => {
-    if (isLoading) return;
+  // Save game state to localStorage whenever it changes
+  useEffect(() => {
+    if (articles.length > 0 && !isLoading) {
+      localStorage.setItem(getGameStorageKey(), JSON.stringify(gameState));
+    }
+  }, [gameState, articles, isLoading]);
 
-    const currentArticle = articles[gameState.currentArticleIndex];
+  // Memoize handlers to prevent recreation on each render
+  const handleLinkClick = useCallback(
+    (linkId: string, isMistake: boolean) => {
+      if (isLoading) return;
 
-    // Update state to mark link as clicked
-    setGameState((prev) => {
-      const updatedClickedLinks = {
-        ...prev.clickedLinks,
-        [linkId]: true,
-      };
+      const currentArticle = articles[gameState.currentArticleIndex];
+      if (!currentArticle) return;
 
-      const updatedScores = [...prev.scores];
+      // Update state to mark link as clicked
+      setGameState((prev) => {
+        const updatedClickedLinks = {
+          ...prev.clickedLinks,
+          [linkId]: true,
+        };
+
+        const updatedScores = [...prev.scores];
+
+        if (isMistake) {
+          // Award 5 points for clicking the correct mistake
+          updatedScores[prev.currentArticleIndex] = 5;
+        }
+
+        return {
+          ...prev,
+          clickedLinks: updatedClickedLinks,
+          scores: updatedScores,
+        };
+      });
 
       if (isMistake) {
-        // Award 5 points for clicking the correct mistake
-        updatedScores[prev.currentArticleIndex] = 5;
-
         // Find the mistaken link to display in the dialog
         const mistakeLink = currentArticle.links.find(
           (link) => link.id === linkId,
         );
         if (mistakeLink) {
           setCurrentMistakeLink(mistakeLink);
+          // Open dialog for correction
+          setDialogOpen(true);
+
+          // Show congratulatory toast - moved outside of setState
+          toast({
+            title: "Good eye!",
+            description: "You found the mistake! Now, what's the correct term?",
+          });
         }
-
-        // Open dialog for correction
-        setDialogOpen(true);
-
-        // Show congratulatory toast
-        toast({
-          title: "Good eye!",
-          description: "You found the mistake! Now, what's the correct term?",
-        });
       } else {
         // If they clicked a correct link, show a toast
         toast({
@@ -146,82 +162,95 @@ export const WikiGame: React.FC = () => {
           variant: "destructive",
         });
       }
+    },
+    [isLoading, articles, gameState.currentArticleIndex, toast],
+  );
 
-      return {
-        ...prev,
-        clickedLinks: updatedClickedLinks,
-        scores: updatedScores,
-      };
-    });
-  };
+  const handleSubmitCorrection = useCallback(
+    (correction: string) => {
+      if (!currentMistakeLink || isLoading) return;
 
-  const handleSubmitCorrection = (correction: string) => {
-    if (!currentMistakeLink || isLoading) return;
+      const currentArticle = articles[gameState.currentArticleIndex];
+      if (!currentArticle) return;
 
-    const currentArticle = articles[gameState.currentArticleIndex];
-    const isCorrect =
-      correction.trim().toLowerCase() ===
-      currentMistakeLink.correctAnswer?.toLowerCase();
+      const isCorrect =
+        correction.trim().toLowerCase() ===
+        currentMistakeLink.correctAnswer?.toLowerCase();
 
-    setGameState((prev) => {
-      const updatedCorrections = {
-        ...prev.enteredCorrections,
-        [currentArticle.id]: correction,
-      };
+      setGameState((prev) => {
+        const updatedCorrections = {
+          ...prev.enteredCorrections,
+          [currentArticle.id]: correction,
+        };
 
-      const updatedScores = [...prev.scores];
-      // If correct, add another 5 points (total 10 for this article)
-      if (isCorrect) {
-        updatedScores[prev.currentArticleIndex] = 10;
-      }
+        const updatedScores = [...prev.scores];
+        // If correct, add another 5 points (total 10 for this article)
+        if (isCorrect) {
+          updatedScores[prev.currentArticleIndex] = 10;
+        }
 
-      return {
-        ...prev,
-        enteredCorrections: updatedCorrections,
-        scores: updatedScores,
-      };
-    });
-
-    setDialogOpen(false);
-    setCurrentMistakeLink(null);
-
-    // Show toast with feedback
-    toast({
-      title: isCorrect ? "Correct! +5 points" : "Not quite right",
-      description: isCorrect
-        ? "That's exactly right! You've earned 5 more points."
-        : `The correct answer was "${currentMistakeLink.correctAnswer}".`,
-      variant: isCorrect ? "default" : "destructive",
-    });
-
-    // Navigate to next article automatically if not the last one
-    if (!isLoading) {
-      const allArticlesAttempted = articles.every((article) => {
-        const mistakeLink = article.links[article.mistakeIndex];
-        return gameState.clickedLinks[mistakeLink.id] || false;
+        return {
+          ...prev,
+          enteredCorrections: updatedCorrections,
+          scores: updatedScores,
+        };
       });
 
-      if (
-        !allArticlesAttempted &&
-        gameState.currentArticleIndex < articles.length - 1
-      ) {
-        setTimeout(() => {
-          handleNavigate(gameState.currentArticleIndex + 1);
-        }, 1500);
+      // These updates should be after the setState call
+      setDialogOpen(false);
+      setCurrentMistakeLink(null);
+
+      // Show toast with feedback
+      toast({
+        title: isCorrect ? "Correct! +5 points" : "Not quite right",
+        description: isCorrect
+          ? "That's exactly right! You've earned 5 more points."
+          : `The correct answer was "${currentMistakeLink.correctAnswer}".`,
+        variant: isCorrect ? "default" : "destructive",
+      });
+
+      // Handle navigation in a timeout to avoid render phase issues
+      if (!isLoading) {
+        const allArticlesAttempted = articles.every((article) => {
+          if (!article.links || article.mistakeIndex === undefined)
+            return false;
+          const mistakeLink = article.links[article.mistakeIndex];
+          return mistakeLink && gameState.clickedLinks[mistakeLink.id];
+        });
+
+        if (
+          !allArticlesAttempted &&
+          gameState.currentArticleIndex < articles.length - 1
+        ) {
+          setTimeout(() => {
+            handleNavigate(gameState.currentArticleIndex + 1);
+          }, 1500);
+        }
       }
-    }
-  };
+    },
+    [
+      currentMistakeLink,
+      isLoading,
+      articles,
+      gameState.currentArticleIndex,
+      gameState.clickedLinks,
+      toast,
+    ],
+  );
 
-  const handleNavigate = (index: number) => {
-    if (isLoading) return;
+  const handleNavigate = useCallback(
+    (index: number) => {
+      if (isLoading) return;
 
-    setGameState((prev) => ({
-      ...prev,
-      currentArticleIndex: index,
-    }));
-  };
+      setGameState((prev) => ({
+        ...prev,
+        currentArticleIndex: index,
+      }));
+    },
+    [isLoading],
+  );
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     if (isLoading) return;
 
     const defaultState: GameState = {
@@ -239,9 +268,9 @@ export const WikiGame: React.FC = () => {
       title: "Game Reset",
       description: "Your progress has been reset. Good luck!",
     });
-  };
+  }, [isLoading, articles.length, toast]);
 
-  const getGameResults = (): GameResults => {
+  const getGameResults = useCallback((): GameResults => {
     if (isLoading || articles.length === 0) {
       return {
         date: new Date().toISOString().split("T")[0],
@@ -252,6 +281,9 @@ export const WikiGame: React.FC = () => {
     }
 
     const results: GameResult[] = articles.map((article) => {
+      if (!article.links || article.mistakeIndex === undefined)
+        return "unattempted";
+
       const mistakeLink = article.links[article.mistakeIndex];
       if (!mistakeLink) return "unattempted";
 
@@ -271,7 +303,7 @@ export const WikiGame: React.FC = () => {
       score: totalScore,
       maxScore,
     };
-  };
+  }, [isLoading, articles, gameState.clickedLinks, gameState.scores]);
 
   // Don't render until articles are loaded
   if (isLoading || articles.length === 0) {
@@ -283,8 +315,23 @@ export const WikiGame: React.FC = () => {
   }
 
   const currentArticle = articles[gameState.currentArticleIndex];
+  if (!currentArticle) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        Error loading article data. Please try again.
+      </div>
+    );
+  }
+
   const totalScore = gameState.scores.reduce((sum, score) => sum + score, 0);
   const maxScore = getMaxScore(articles);
+
+  // Prepare the clickedMistakes array safely for GameProgress
+  const clickedMistakes = articles.map((article) => {
+    if (!article.links || article.mistakeIndex === undefined) return false;
+    const mistakeLink = article.links[article.mistakeIndex];
+    return (mistakeLink && gameState.clickedLinks[mistakeLink.id]) || false;
+  });
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -313,14 +360,7 @@ export const WikiGame: React.FC = () => {
         articles={articles}
         currentIndex={gameState.currentArticleIndex}
         scores={gameState.scores}
-        clickedMistakes={articles.map((article) => {
-          if (!article.links || article.mistakeIndex === undefined)
-            return false;
-          const mistakeLink = article.links[article.mistakeIndex];
-          return (
-            (mistakeLink && gameState.clickedLinks[mistakeLink.id]) || false
-          );
-        })}
+        clickedMistakes={clickedMistakes}
         enteredCorrections={articles.map(
           (article) => gameState.enteredCorrections[article.id] || "",
         )}
