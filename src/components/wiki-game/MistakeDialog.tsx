@@ -9,10 +9,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Article } from "@/types/wiki-game";
+import { Article, Link } from "@/types/wiki-game";
 
 interface MistakeDialogProps {
   article: Article;
+  mistakeLink: Link;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmitCorrection: (correction: string) => void;
@@ -20,6 +21,7 @@ interface MistakeDialogProps {
 
 export const MistakeDialog: React.FC<MistakeDialogProps> = ({
   article,
+  mistakeLink,
   open,
   onOpenChange,
   onSubmitCorrection,
@@ -48,7 +50,7 @@ export const MistakeDialog: React.FC<MistakeDialogProps> = ({
             <DialogTitle>Good catch! What's the correct term?</DialogTitle>
             <DialogDescription>
               You found the mistake in this article! Now, enter what you think
-              is the correct term to replace "{article.mistake.text}".
+              is the correct term to replace "{mistakeLink.text}".
             </DialogDescription>
           </DialogHeader>
 

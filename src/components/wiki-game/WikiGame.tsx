@@ -3,7 +3,13 @@ import { Article as ArticleComponent } from "./Article";
 import { MistakeDialog } from "./MistakeDialog";
 import { GameProgress } from "./GameProgress";
 import { ResultsDisplay } from "./ResultsDisplay";
-import { Article, GameState, GameResult, GameResults } from "@/types/wiki-game";
+import {
+  Article,
+  GameState,
+  GameResult,
+  GameResults,
+  Link,
+} from "@/types/wiki-game";
 import {
   getArticlesForToday,
   getGameStorageKey,
@@ -18,12 +24,15 @@ export const WikiGame: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [gameState, setGameState] = useState<GameState>({
     currentArticleIndex: 0,
-    clickedMistakes: [],
-    enteredCorrections: [],
+    clickedLinks: {},
+    enteredCorrections: {},
     scores: [],
     gameCompleted: false,
   });
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [currentMistakeLink, setCurrentMistakeLink] = useState<Link | null>(
+    null,
+  );
 
   // Initialize game with today's articles and load any saved progress
   useEffect(() => {
@@ -33,8 +42,8 @@ export const WikiGame: React.FC = () => {
     // Initialize default game state
     const defaultState: GameState = {
       currentArticleIndex: 0,
-      clickedMistakes: Array(todayArticles.length).fill(false),
-      enteredCorrections: Array(todayArticles.length).fill(""),
+      clickedLinks: {},
+      enteredCorrections: {},
       scores: Array(todayArticles.length).fill(0),
       gameCompleted: false,
     };
@@ -60,44 +69,85 @@ export const WikiGame: React.FC = () => {
     }
   }, [gameState, articles]);
 
-  const handleMistakeClick = () => {
-    // Update state to mark mistake as clicked and award 5 points
+  // Check if all articles have been completed
+  useEffect(() => {
+    if (articles.length > 0) {
+      const allMistakesFound = articles.every((article, index) => {
+        const mistakeLink = article.links[article.mistakeIndex];
+        return gameState.clickedLinks[mistakeLink.id] || false;
+      });
+
+      if (allMistakesFound && !gameState.gameCompleted) {
+        setGameState((prev) => ({
+          ...prev,
+          gameCompleted: true,
+        }));
+      }
+    }
+  }, [gameState.clickedLinks, articles]);
+
+  const handleLinkClick = (linkId: string, isMistake: boolean) => {
+    const currentArticle = articles[gameState.currentArticleIndex];
+
+    // Update state to mark link as clicked
     setGameState((prev) => {
-      const updatedClickedMistakes = [...prev.clickedMistakes];
-      updatedClickedMistakes[prev.currentArticleIndex] = true;
+      const updatedClickedLinks = {
+        ...prev.clickedLinks,
+        [linkId]: true,
+      };
 
       const updatedScores = [...prev.scores];
-      // Award 5 points for clicking the mistake if not already clicked
-      if (!prev.clickedMistakes[prev.currentArticleIndex]) {
+
+      if (isMistake) {
+        // Award 5 points for clicking the correct mistake
         updatedScores[prev.currentArticleIndex] = 5;
+
+        // Find the mistaken link to display in the dialog
+        const mistakeLink = currentArticle.links.find(
+          (link) => link.id === linkId,
+        );
+        if (mistakeLink) {
+          setCurrentMistakeLink(mistakeLink);
+        }
+
+        // Open dialog for correction
+        setDialogOpen(true);
+
+        // Show congratulatory toast
+        toast({
+          title: "Good eye!",
+          description: "You found the mistake! Now, what's the correct term?",
+        });
+      } else {
+        // If they clicked a correct link, show a toast
+        toast({
+          title: "Not a mistake",
+          description: "This link is correct. Keep looking for the mistake!",
+          variant: "destructive",
+        });
       }
 
       return {
         ...prev,
-        clickedMistakes: updatedClickedMistakes,
+        clickedLinks: updatedClickedLinks,
         scores: updatedScores,
       };
-    });
-
-    // Open dialog for correction
-    setDialogOpen(true);
-
-    // Show congratulatory toast
-    toast({
-      title: "Good eye!",
-      description: "You found the mistake! Now, what's the correct term?",
     });
   };
 
   const handleSubmitCorrection = (correction: string) => {
+    if (!currentMistakeLink) return;
+
     const currentArticle = articles[gameState.currentArticleIndex];
     const isCorrect =
       correction.trim().toLowerCase() ===
-      currentArticle.mistake.correctAnswer.toLowerCase();
+      currentMistakeLink.correctAnswer?.toLowerCase();
 
     setGameState((prev) => {
-      const updatedCorrections = [...prev.enteredCorrections];
-      updatedCorrections[prev.currentArticleIndex] = correction;
+      const updatedCorrections = {
+        ...prev.enteredCorrections,
+        [currentArticle.id]: correction,
+      };
 
       const updatedScores = [...prev.scores];
       // If correct, add another 5 points (total 10 for this article)
@@ -105,32 +155,34 @@ export const WikiGame: React.FC = () => {
         updatedScores[prev.currentArticleIndex] = 10;
       }
 
-      // Check if all articles have been attempted
-      const allAttempted = prev.clickedMistakes.every((clicked) => clicked);
-
       return {
         ...prev,
         enteredCorrections: updatedCorrections,
         scores: updatedScores,
-        gameCompleted: allAttempted,
       };
     });
 
     setDialogOpen(false);
+    setCurrentMistakeLink(null);
 
     // Show toast with feedback
     toast({
       title: isCorrect ? "Correct! +5 points" : "Not quite right",
       description: isCorrect
         ? "That's exactly right! You've earned 5 more points."
-        : `The correct answer was "${currentArticle.mistake.correctAnswer}".`,
+        : `The correct answer was "${currentMistakeLink.correctAnswer}".`,
       variant: isCorrect ? "default" : "destructive",
     });
 
     // Navigate to next article automatically if not the last one
+    const allArticlesAttempted = articles.every((article, index) => {
+      const mistakeLink = article.links[article.mistakeIndex];
+      return gameState.clickedLinks[mistakeLink.id] || false;
+    });
+
     if (
-      gameState.currentArticleIndex < articles.length - 1 &&
-      !gameState.clickedMistakes[gameState.currentArticleIndex + 1]
+      !allArticlesAttempted &&
+      gameState.currentArticleIndex < articles.length - 1
     ) {
       setTimeout(() => {
         handleNavigate(gameState.currentArticleIndex + 1);
@@ -148,8 +200,8 @@ export const WikiGame: React.FC = () => {
   const resetGame = () => {
     const defaultState: GameState = {
       currentArticleIndex: 0,
-      clickedMistakes: Array(articles.length).fill(false),
-      enteredCorrections: Array(articles.length).fill(""),
+      clickedLinks: {},
+      enteredCorrections: {},
       scores: Array(articles.length).fill(0),
       gameCompleted: false,
     };
@@ -164,9 +216,14 @@ export const WikiGame: React.FC = () => {
   };
 
   const getGameResults = (): GameResults => {
-    const results: GameResult[] = articles.map((_, index) => {
-      if (!gameState.clickedMistakes[index]) return "unattempted";
-      return gameState.scores[index] === 10 ? "correct" : "incorrect";
+    const results: GameResult[] = articles.map((article) => {
+      const mistakeLink = article.links[article.mistakeIndex];
+      const mistakeLinkId = mistakeLink.id;
+
+      if (!gameState.clickedLinks[mistakeLinkId]) return "unattempted";
+
+      const articleIndex = articles.findIndex((a) => a.id === article.id);
+      return gameState.scores[articleIndex] === 10 ? "correct" : "incorrect";
     });
 
     const totalScore = gameState.scores.reduce((sum, score) => sum + score, 0);
@@ -192,6 +249,11 @@ export const WikiGame: React.FC = () => {
   const currentArticle = articles[gameState.currentArticleIndex];
   const totalScore = gameState.scores.reduce((sum, score) => sum + score, 0);
   const maxScore = getMaxScore(articles);
+
+  // Check if the current article's mistake has been found
+  const mistakeLink = currentArticle.links[currentArticle.mistakeIndex];
+  const mistakeLinkId = mistakeLink.id;
+  const mistakeFound = gameState.clickedLinks[mistakeLinkId] || false;
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -220,26 +282,32 @@ export const WikiGame: React.FC = () => {
         articles={articles}
         currentIndex={gameState.currentArticleIndex}
         scores={gameState.scores}
-        clickedMistakes={gameState.clickedMistakes}
-        enteredCorrections={gameState.enteredCorrections}
+        clickedMistakes={articles.map((article, index) => {
+          const mistakeLink = article.links[article.mistakeIndex];
+          return gameState.clickedLinks[mistakeLink.id] || false;
+        })}
+        enteredCorrections={articles.map(
+          (article) => gameState.enteredCorrections[article.id] || "",
+        )}
         onNavigate={handleNavigate}
       />
 
       <main className="my-6">
         <ArticleComponent
           article={currentArticle}
-          mistakeClicked={
-            gameState.clickedMistakes[gameState.currentArticleIndex]
-          }
-          onMistakeClick={handleMistakeClick}
+          clickedLinks={gameState.clickedLinks}
+          onLinkClick={handleLinkClick}
         />
 
-        <MistakeDialog
-          article={currentArticle}
-          open={dialogOpen}
-          onOpenChange={setDialogOpen}
-          onSubmitCorrection={handleSubmitCorrection}
-        />
+        {currentMistakeLink && (
+          <MistakeDialog
+            article={currentArticle}
+            mistakeLink={currentMistakeLink}
+            open={dialogOpen}
+            onOpenChange={setDialogOpen}
+            onSubmitCorrection={handleSubmitCorrection}
+          />
+        )}
       </main>
 
       {gameState.gameCompleted && (
