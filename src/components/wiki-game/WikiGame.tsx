@@ -200,7 +200,7 @@ export const WikiGame: React.FC = () => {
       setDialogOpen(false);
       setCurrentMistakeLink(null);
 
-      // Show toast with feedback
+      // Show toast with feedback - always show the correct answer
       toast({
         title: isCorrect ? "Correct! +5 points" : "Not quite right",
         description: isCorrect
@@ -291,7 +291,11 @@ export const WikiGame: React.FC = () => {
       if (!gameState.clickedLinks[mistakeLinkId]) return "unattempted";
 
       const articleIndex = articles.findIndex((a) => a.id === article.id);
-      return gameState.scores[articleIndex] === 10 ? "correct" : "incorrect";
+      const score = gameState.scores[articleIndex];
+
+      // Change to show partial (yellow) for finding mistake but not correct answer
+      if (score === 5) return "partial";
+      return score === 10 ? "correct" : "incorrect";
     });
 
     const totalScore = gameState.scores.reduce((sum, score) => sum + score, 0);

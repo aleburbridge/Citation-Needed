@@ -21,7 +21,7 @@ export interface GameState {
   gameCompleted: boolean;
 }
 
-export type GameResult = "correct" | "incorrect" | "unattempted";
+export type GameResult = "correct" | "incorrect" | "partial" | "unattempted";
 
 export interface GameResults {
   date: string;
