@@ -1,7 +1,7 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { GameResult, GameResults } from "@/types/wiki-game";
-import { Copy } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface ResultsDisplayProps {
@@ -10,6 +10,8 @@ interface ResultsDisplayProps {
 
 export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
   const { toast } = useToast();
+  const [copied, setCopied] = useState(false);
+  const [resultText, setResultText] = useState("");
 
   const getResultEmoji = (result: GameResult): string => {
     switch (result) {
@@ -29,58 +31,61 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
     return `Wikipedia Challenge ${results.date} - ${results.score}/${results.maxScore}\n${resultsLine}`;
   }, [results]);
 
-  const copyToClipboard = async () => {
+  const copyToClipboard = () => {
     try {
       const shareText = generateShareText();
 
-      // Use the newer clipboard API
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(shareText);
-        toast({
-          title: "Results copied to clipboard!",
-          description: "You can now paste and share your results.",
-        });
-      } else {
-        // Fallback for older browsers
-        const textArea = document.createElement("textarea");
-        textArea.value = shareText;
+      // Always show the text for copying (since direct clipboard access is restricted)
+      setResultText(shareText);
 
-        // Make the textarea out of viewport
-        textArea.style.position = "fixed";
-        textArea.style.left = "-999999px";
-        textArea.style.top = "-999999px";
-        document.body.appendChild(textArea);
+      // Use the execCommand approach instead of Clipboard API
+      const textArea = document.createElement("textarea");
+      textArea.value = shareText;
 
-        textArea.focus();
-        textArea.select();
+      // Make the textarea part of the document but visually hidden
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      textArea.style.pointerEvents = "none";
+      textArea.style.left = "-9999px";
+      textArea.style.top = "-9999px";
 
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        // Try to copy with execCommand
         const successful = document.execCommand("copy");
-        document.body.removeChild(textArea);
-
         if (successful) {
+          setCopied(true);
           toast({
             title: "Results copied to clipboard!",
             description: "You can now paste and share your results.",
           });
+
+          // Reset the copied state after 2 seconds
+          setTimeout(() => setCopied(false), 2000);
         } else {
-          throw new Error("Copy command was unsuccessful");
+          throw new Error("Copy command failed");
         }
+      } catch (err) {
+        // If execCommand fails, at least we have the text visible
+        toast({
+          title: "Copy to clipboard unavailable",
+          description: "Please manually select and copy the text below.",
+          variant: "default",
+        });
+      } finally {
+        document.body.removeChild(textArea);
       }
     } catch (err) {
       console.error("Failed to copy text: ", err);
+      // Show a toast with instructions for manual copying
       toast({
-        title: "Could not copy to clipboard",
-        description:
-          "Please try manually selecting and copying the results below.",
-        variant: "destructive",
+        title: "Could not copy automatically",
+        description: "Please select and copy the text below.",
+        variant: "default",
       });
-
-      // Show the results as text for manual copy
-      const resultsContainer = document.getElementById("results-text");
-      if (resultsContainer) {
-        resultsContainer.textContent = generateShareText();
-        resultsContainer.style.display = "block";
-      }
     }
   };
 
@@ -99,22 +104,31 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
         ))}
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-4">
         <Button
           onClick={copyToClipboard}
           className="flex items-center gap-2 px-4 py-2"
           variant="default"
         >
-          <Copy className="h-4 w-4" />
-          Copy Results
+          {copied ? (
+            <Check className="h-4 w-4" />
+          ) : (
+            <Copy className="h-4 w-4" />
+          )}
+          {copied ? "Copied!" : "Copy Results"}
         </Button>
       </div>
 
-      {/* Hidden pre-formatted text for fallback manual copying */}
-      <pre
-        id="results-text"
-        className="mt-4 p-3 bg-gray-100 rounded text-left overflow-x-auto hidden"
-      ></pre>
+      {/* Always show the text for manual copying */}
+      <div className="mt-4 relative">
+        <pre className="p-3 bg-gray-100 rounded text-left overflow-x-auto text-sm whitespace-pre-wrap">
+          {resultText || generateShareText()}
+        </pre>
+        <p className="text-xs text-gray-500 mt-1">
+          If automatic copying doesn't work, please select and copy the text
+          above.
+        </p>
+      </div>
     </div>
   );
 };
