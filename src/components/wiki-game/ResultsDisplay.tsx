@@ -28,7 +28,7 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ results }) => {
 
   const generateShareText = useCallback(() => {
     const resultsLine = results.results.map(getResultEmoji).join("");
-    return `Wikipedia Challenge ${results.date} - ${results.score}/${results.maxScore}\n${resultsLine}`;
+    return `Citation Needed ${results.date} - ${results.score}/${results.maxScore}\n${resultsLine}`;
   }, [results]);
 
   const copyToClipboard = () => {

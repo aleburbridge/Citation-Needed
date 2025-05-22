@@ -6,7 +6,7 @@ A daily puzzle game of spotting mistakes in Wikipedia-style articles. Become the
 
 ## Overview
 
-Wikipedia Challenge is an engaging browser-based game that tests your knowledge and attention to detail. Each day, players are presented with 5 Wikipedia-style articles that each contain one deliberate mistake. Your mission is to find the mistake, click on it, and then provide the correct answer.
+Citation Needed is an engaging browser-based game that tests your knowledge and attention to detail. Each day, players are presented with 5 Wikipedia-style articles that each contain one deliberate mistake. Your mission is to find the mistake, click on it, and then provide the correct answer.
 
 ## How to Play
 

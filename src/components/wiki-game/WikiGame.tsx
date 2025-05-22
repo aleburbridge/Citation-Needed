@@ -194,7 +194,7 @@ export const WikiGame: React.FC = () => {
           setTimeout(() => {
             toast({
               title: "The actual mistake was",
-              description: `"${mistakeLink.text}" should have been "${mistakeLink.correctAnswer}"`,
+              description: `"${mistakeLink.text}" should have been "${Array.isArray(mistakeLink.correctAnswer) ? mistakeLink.correctAnswer[0] : mistakeLink.correctAnswer}"`,
               variant: "default",
             });
           }, 800);
@@ -220,9 +220,11 @@ export const WikiGame: React.FC = () => {
       const currentArticle = articles[gameState.currentArticleIndex];
       if (!currentArticle) return;
 
-      const isCorrect =
-        correction.trim().toLowerCase() ===
-        currentMistakeLink.correctAnswer?.toLowerCase();
+      const isCorrect = Array.isArray(currentMistakeLink.correctAnswer)
+        ? currentMistakeLink.correctAnswer.some(
+            (answer) => correction.trim().toLowerCase() === answer.toLowerCase()
+          )
+        : correction.trim().toLowerCase() === currentMistakeLink.correctAnswer?.toLowerCase();
 
       setGameState((prev) => {
         const updatedCorrections = {
@@ -252,7 +254,7 @@ export const WikiGame: React.FC = () => {
         title: isCorrect ? "Correct! +5 points" : "Not quite right",
         description: isCorrect
           ? "That's exactly right! You've earned 5 more points."
-          : `The correct answer was "${currentMistakeLink.correctAnswer}".`,
+          : `The correct answer was "${Array.isArray(currentMistakeLink.correctAnswer) ? currentMistakeLink.correctAnswer[0] : currentMistakeLink.correctAnswer}".`,
         variant: isCorrect ? "default" : "destructive",
       });
 
@@ -374,23 +376,17 @@ export const WikiGame: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto p-4">
       <header className="mb-6 text-center">
-        <h1 className="text-3xl font-bold mb-2">Wikipedia Challenge</h1>
+        <h1 className="text-3xl font-bold mb-2">Citation Needed {new Date().toLocaleDateString('en-US', {year: 'numeric', month: 'numeric', day: '2-digit' })}</h1> 
         <p className="text-gray-600 mb-4">
-          <i>Find the mistake in each Wikipedia passage</i>
+          <i>Click the incorrect link in each Wikipedia passage</i>
         </p>
+  
         <div className="flex justify-center items-center gap-2">
+
           <p className="font-medium">
             Score: {totalScore}/{maxScore}
           </p>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={resetGame}
-            className="flex items-center gap-1"
-          >
-            <RefreshCw className="h-3 w-3" />
-            Reset
-          </Button>
+
         </div>
       </header>
 

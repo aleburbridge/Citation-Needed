@@ -9,7 +9,7 @@ export interface Article {
 export interface Link {
   id: string;
   text: string;
-  correctAnswer?: string; // Only present for the mistake link
+  correctAnswer?: string | string[]; // Can be a single string or array of strings
   isMistake: boolean;
 }
 
