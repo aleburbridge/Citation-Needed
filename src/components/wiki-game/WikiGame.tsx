@@ -181,23 +181,17 @@ export const WikiGame: React.FC = () => {
           });
         }
       } else {
-        // If they clicked a correct link, show a toast and count it as a miss
-        toast({
-          title: "Incorrect",
-          description: "That wasn't the mistake. Moving to the next article.",
-          variant: "destructive",
-        });
 
         // Get the actual mistake link to show what was missed
         const mistakeLink = currentArticle.links[currentArticle.mistakeIndex];
         if (mistakeLink) {
           setTimeout(() => {
             toast({
-              title: "The actual mistake was",
+              title: "Incorrect",
               description: `"${mistakeLink.text}" should have been "${Array.isArray(mistakeLink.correctAnswer) ? mistakeLink.correctAnswer[0] : mistakeLink.correctAnswer}"`,
               variant: "default",
             });
-          }, 800);
+          }, 200);
         }
 
         // Move to the next article
