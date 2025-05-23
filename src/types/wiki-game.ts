@@ -7,7 +7,7 @@ export interface Article {
 }
 
 export interface Link {
-  id: string;
+  id?: string; // Optional since we can use array indices
   text: string;
   correctAnswer?: string | string[]; // Can be a single string or array of strings
   isMistake: boolean;

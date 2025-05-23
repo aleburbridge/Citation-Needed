@@ -55,7 +55,7 @@ export const GameProgress: React.FC<GameProgressProps> = ({
           onClick={() => onNavigate(currentIndex - 1)}
           disabled={isFirst}
         >
-          <ChevronLeft className="h-4 w-4 mr-1" /> Previous
+          ←
         </Button>
 
         <Button
@@ -64,7 +64,7 @@ export const GameProgress: React.FC<GameProgressProps> = ({
           onClick={() => onNavigate(currentIndex + 1)}
           disabled={isLast}
         >
-          Next <ChevronRight className="h-4 w-4 ml-1" />
+          →
         </Button>
       </div>
 

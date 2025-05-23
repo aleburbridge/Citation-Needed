@@ -26,7 +26,8 @@ export const Article: React.FC<ArticleProps> = ({
 
           // After each text segment (except the last), render a link
           const link = links[index];
-          const isLinkClicked = clickedLinks[link.id] || false;
+          const linkId = `${article.id}-${index}`;
+          const isLinkClicked = clickedLinks[linkId] || false;
 
           return (
             <React.Fragment key={`segment-${index}`}>
@@ -40,7 +41,7 @@ export const Article: React.FC<ArticleProps> = ({
                   !isLinkClicked && "hover:bg-blue-100",
                 )}
                 onClick={() =>
-                  !isLinkClicked && onLinkClick(link.id, link.isMistake)
+                  !isLinkClicked && onLinkClick(linkId, link.isMistake)
                 }
                 aria-label={
                   isLinkClicked && link.isMistake
