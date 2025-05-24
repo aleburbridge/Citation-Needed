@@ -1,9 +1,6 @@
 import { Article } from "@/types/wiki-game";
-
-// Function to get today's date in YYYY-MM-DD format
-const getFormattedDate = (): string => {
-  return new Date().toISOString().split("T")[0];
-};
+import { articleGroups } from "./articleHistory";
+import { formatDate } from "@/lib/utils";
 
 // Get articles for today
 export const getArticlesForToday = (): Article[] => {
@@ -193,7 +190,7 @@ export const getArticlesForToday = (): Article[] => {
 
 // Function to get a key for storing game progress in localStorage
 export const getGameStorageKey = (): string => {
-  return `wiki_game_${getFormattedDate()}`;
+  return `wiki_game_${formatDate(new Date())}`;
 };
 
 // Compute maximum possible score (5 points for clicking mistake + 5 points for correction per article)

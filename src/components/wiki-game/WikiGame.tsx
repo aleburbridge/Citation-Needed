@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { RefreshCw } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
 export const WikiGame: React.FC = () => {
   const { toast } = useToast();
@@ -290,7 +291,7 @@ export const WikiGame: React.FC = () => {
   const getGameResults = useCallback((): GameResults => {
     if (isLoading || articles.length === 0) {
       return {
-        date: new Date().toLocaleDateString('en-US', {year: 'numeric', month: 'numeric', day: '2-digit' }),
+        date: formatDate(new Date()),
         results: [],
         score: 0,
         maxScore: 0,
@@ -322,7 +323,7 @@ export const WikiGame: React.FC = () => {
     const maxScore = getMaxScore(articles);
 
     return {
-      date: new Date().toLocaleDateString('en-US', {year: 'numeric', month: 'numeric', day: '2-digit' }),
+      date: formatDate(new Date()),
       results,
       score: totalScore,
       maxScore,
@@ -361,7 +362,7 @@ export const WikiGame: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto p-4">
       <header className="mb-6 text-center">
-        <h1 className="text-3xl font-bold mb-2">🌐 Citation Needed {new Date().toLocaleDateString('en-US', {year: 'numeric', month: 'numeric', day: '2-digit' })}</h1> 
+        <h1 className="text-3xl font-bold mb-2">🌐 Citation Needed (On Pause for the Weekend. New Puzzle 5/26/2025){/*formatDate(new Date())*/}</h1> 
         <p className="text-gray-600 mb-4">
           <i>Click the hyperlink with incorrect information in each Wikipedia passage</i>
         </p>
