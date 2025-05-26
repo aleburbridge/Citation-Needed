@@ -6,12 +6,16 @@ interface ArticleProps {
   article: ArticleType;
   clickedLinks: Record<string, boolean>;
   onLinkClick: (linkId: string, isMistake: boolean) => void;
+  totalScore?: number;
+  maxScore?: number;
 }
 
 export const Article: React.FC<ArticleProps> = ({
   article,
   clickedLinks,
   onLinkClick,
+  totalScore,
+  maxScore,
 }) => {
   const { content, links, title } = article;
 
@@ -62,7 +66,23 @@ export const Article: React.FC<ArticleProps> = ({
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4 text-gray-900">{title}</h1>
+      <div className="flex flex-col">
+        <div className="flex gap-5 max-md:flex-col max-md:gap-0">
+          <div className="flex flex-col w-1/2 max-md:ml-0 max-md:w-full">
+            <h1 className="text-2xl font-bold mb-4 text-gray-900">{title}</h1>
+          </div>
+          <div className="flex flex-col w-1/2 ml-5 max-md:ml-0 max-md:w-full">
+            {totalScore !== undefined && maxScore !== undefined && (
+              <p className="font-medium flex justify-end ml-auto items-center">
+                <span>Score: </span>
+                <span>{totalScore}</span>
+                <span>/</span>
+                <span>{maxScore}</span>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
       <p className="text-gray-700 leading-relaxed">{renderArticleContent()}</p>
     </div>
   );
