@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { articleGroups } from "@/data/articleHistory";
-import { formatDate } from "@/lib/utils";
+import { formatDate, createLocalDate } from "@/lib/utils";
 
 interface DateSelectorProps {
   onDateSelect: (date: string) => void;
@@ -48,15 +48,22 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
 
   // Parse the current date string properly to avoid timezone issues
   const parseCurrentDate = (dateStr: string): Date => {
-    // Expecting format like "5/25/2025" from formatDate
-    const parts = dateStr.split("/");
-    if (parts.length === 3) {
-      const month = parseInt(parts[0]) - 1; // Month is 0-indexed
-      const day = parseInt(parts[1]);
-      const year = parseInt(parts[2]);
-      return new Date(year, month, day);
+    // Try to find the original date string that produced this formatted date
+    const matchingGroup = articleGroups.find((group) => group.date === dateStr);
+    if (matchingGroup) {
+      // If we found a matching group, we need to extract the original date
+      // Since we know the format is from "2025-05-25" etc., let's reverse engineer it
+      const parts = dateStr.split("/");
+      if (parts.length === 3) {
+        const month = parseInt(parts[0]);
+        const day = parseInt(parts[1]);
+        const year = parseInt(parts[2]);
+        return new Date(year, month - 1, day); // month is 0-indexed
+      }
     }
-    return new Date(dateStr);
+
+    // Fallback to current date
+    return new Date();
   };
 
   const currentDateObj = parseCurrentDate(currentDate);
