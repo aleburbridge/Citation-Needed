@@ -26,9 +26,6 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
 }) => {
   const [open, setOpen] = React.useState(false);
 
-  // Get all available puzzle dates
-  const availableDates = articleGroups.map((group) => new Date(group.date));
-
   // Create a set of available date strings for quick lookup
   const availableDateStrings = new Set(
     articleGroups.map((group) => group.date),
