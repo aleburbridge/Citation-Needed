@@ -12,7 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { articleGroups } from "@/data/articleHistory";
+import { articleGroups } from "@/data/articles";
 import { formatDate, createLocalDate } from "@/lib/utils";
 
 interface DateSelectorProps {
