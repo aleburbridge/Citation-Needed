@@ -46,7 +46,20 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
     return availableDateStrings.has(dateString);
   };
 
-  const currentDateObj = new Date(currentDate);
+  // Parse the current date string properly to avoid timezone issues
+  const parseCurrentDate = (dateStr: string): Date => {
+    // Expecting format like "5/25/2025" from formatDate
+    const parts = dateStr.split("/");
+    if (parts.length === 3) {
+      const month = parseInt(parts[0]) - 1; // Month is 0-indexed
+      const day = parseInt(parts[1]);
+      const year = parseInt(parts[2]);
+      return new Date(year, month, day);
+    }
+    return new Date(dateStr);
+  };
+
+  const currentDateObj = parseCurrentDate(currentDate);
 
   return (
     <Tooltip>
