@@ -47,7 +47,7 @@ export const GameProgress: React.FC<GameProgressProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full max-w-3xl mx-auto py-4">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full max-w-3xl mx-auto pb-4">
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
