@@ -54,7 +54,7 @@ export const getArticlesForToday = (): Article[] => {
         " spectators. In Ancient times, the structure was used for ",
         ", ",
         ", and ",
-        " reannactments."
+        " reannactments.",
       ],
       links: [
         {
@@ -94,12 +94,12 @@ export const getArticlesForToday = (): Article[] => {
         ". The style is characterized by fast tempos, complex chord progressions, and ",
         ". Two leading figures in the development of bebop were ",
         " and ",
-        "."
+        ".",
       ],
       links: [
         {
           text: " jazz",
-          isMistake: false
+          isMistake: false,
         },
         {
           text: "1940s",
@@ -108,7 +108,15 @@ export const getArticlesForToday = (): Article[] => {
         {
           text: "Japan",
           isMistake: true,
-          correctAnswer: ["The US", "USA", "the USA", "united states", "the united states", "The united states of america", "america"]
+          correctAnswer: [
+            "The US",
+            "USA",
+            "the USA",
+            "united states",
+            "the united states",
+            "The united states of america",
+            "america",
+          ],
         },
         {
           text: "improvisation",
@@ -133,7 +141,7 @@ export const getArticlesForToday = (): Article[] => {
         " meters above sea level. The first successful summit was achieved by ",
         " and ",
         " in ",
-        "."
+        ".",
       ],
       links: [
         {
@@ -156,7 +164,7 @@ export const getArticlesForToday = (): Article[] => {
           text: "1943",
           correctAnswer: ["1953", "nineteen fifty-three"],
           isMistake: true,
-        }
+        },
       ],
     },
     {
@@ -174,7 +182,7 @@ export const getArticlesForToday = (): Article[] => {
         {
           text: "SHERPANET",
           isMistake: true,
-          correctAnswer: "ARPANET"
+          correctAnswer: "ARPANET",
         },
         {
           text: "1960s",
@@ -193,13 +201,29 @@ export const getArticlesForToday = (): Article[] => {
           isMistake: false,
         },
       ],
-    }
+    },
   ];
 };
 
 // Function to get a key for storing game progress in localStorage
 export const getGameStorageKey = (): string => {
   return `wiki_game_${formatDate(new Date())}`;
+};
+
+// Function to get articles for a specific date
+export const getArticlesForDate = (dateString: string): Article[] => {
+  const articleGroup = articleGroups.find((group) => group.date === dateString);
+  return articleGroup ? articleGroup.articles : getArticlesForToday();
+};
+
+// Function to get all available puzzle dates
+export const getAvailableDates = (): string[] => {
+  return articleGroups.map((group) => group.date);
+};
+
+// Function to get storage key for a specific date
+export const getGameStorageKeyForDate = (dateString: string): string => {
+  return `wiki_game_${dateString}`;
 };
 
 // Compute maximum possible score (5 points for clicking mistake + 5 points for correction per article)

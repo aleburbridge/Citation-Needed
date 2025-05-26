@@ -3,6 +3,7 @@ import { Article as ArticleComponent } from "./Article";
 import { MistakeDialog } from "./MistakeDialog";
 import { GameProgress } from "./GameProgress";
 import { ResultsDisplay } from "./ResultsDisplay";
+import { DateSelector } from "./DateSelector";
 import {
   Article,
   GameState,
@@ -12,7 +13,9 @@ import {
 } from "@/types/wiki-game";
 import {
   getArticlesForToday,
+  getArticlesForDate,
   getGameStorageKey,
+  getGameStorageKeyForDate,
   getMaxScore,
 } from "@/data/articles";
 import { Button } from "@/components/ui/button";
@@ -22,6 +25,9 @@ import { formatDate } from "@/lib/utils";
 
 export const WikiGame: React.FC = () => {
   const { toast } = useToast();
+  const [currentDate, setCurrentDate] = useState<string>(
+    formatDate(new Date()),
+  );
   const [articles, setArticles] = useState<Article[]>([]);
   const [gameState, setGameState] = useState<GameState>({
     currentArticleIndex: 0,
@@ -36,27 +42,25 @@ export const WikiGame: React.FC = () => {
   );
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize game with today's articles and load any saved progress
+  // Initialize game with articles for current date and load any saved progress
   useEffect(() => {
     const initializeGame = () => {
-      const todayArticles = getArticlesForToday();
-      setArticles(todayArticles);
+      const articlesForDate = getArticlesForDate(currentDate);
+      setArticles(articlesForDate);
 
       // Initialize default game state
       const defaultState: GameState = {
         currentArticleIndex: 0,
         clickedLinks: {},
         enteredCorrections: {},
-        scores: Array(todayArticles.length).fill(0),
+        scores: Array(articlesForDate.length).fill(0),
         gameCompleted: false,
       };
 
-      // Try to load saved state
+      // Try to load saved state for the current date
       try {
-        // Force a reset of stored data due to format changes
-        localStorage.removeItem(getGameStorageKey());
-
-        const savedState = localStorage.getItem(getGameStorageKey());
+        const storageKey = getGameStorageKeyForDate(currentDate);
+        const savedState = localStorage.getItem(storageKey);
         if (savedState) {
           const parsedState = JSON.parse(savedState);
           // Verify the saved state format matches our current expected format
@@ -64,7 +68,7 @@ export const WikiGame: React.FC = () => {
             parsedState.clickedLinks !== undefined &&
             parsedState.enteredCorrections !== undefined &&
             Array.isArray(parsedState.scores) &&
-            parsedState.scores.length === todayArticles.length
+            parsedState.scores.length === articlesForDate.length
           ) {
             setGameState(parsedState);
           } else {
@@ -83,7 +87,7 @@ export const WikiGame: React.FC = () => {
     };
 
     initializeGame();
-  }, []);
+  }, [currentDate]);
 
   // Check if all articles have been completed - moved to separate effect to avoid render phase state updates
   useEffect(() => {
@@ -108,9 +112,10 @@ export const WikiGame: React.FC = () => {
   // Save game state to localStorage whenever it changes
   useEffect(() => {
     if (articles.length > 0 && !isLoading) {
-      localStorage.setItem(getGameStorageKey(), JSON.stringify(gameState));
+      const storageKey = getGameStorageKeyForDate(currentDate);
+      localStorage.setItem(storageKey, JSON.stringify(gameState));
     }
-  }, [gameState, articles, isLoading]);
+  }, [gameState, articles, isLoading, currentDate]);
 
   // Handle moving to the next article
   const moveToNextArticle = useCallback(() => {
@@ -284,18 +289,23 @@ export const WikiGame: React.FC = () => {
     };
 
     setGameState(defaultState);
-    localStorage.removeItem(getGameStorageKey());
+    const storageKey = getGameStorageKeyForDate(currentDate);
+    localStorage.removeItem(storageKey);
 
     toast({
       title: "Game Reset",
       description: "Your progress has been reset. Good luck!",
     });
-  }, [isLoading, articles.length, toast]);
+  }, [isLoading, articles.length, toast, currentDate]);
+
+  const handleDateSelect = useCallback((dateString: string) => {
+    setCurrentDate(dateString);
+  }, []);
 
   const getGameResults = useCallback((): GameResults => {
     if (isLoading || articles.length === 0) {
       return {
-        date: formatDate(new Date()),
+        date: currentDate,
         results: [],
         score: 0,
         maxScore: 0,
@@ -326,12 +336,18 @@ export const WikiGame: React.FC = () => {
     const maxScore = getMaxScore(articles);
 
     return {
-      date: formatDate(new Date()),
+      date: currentDate,
       results,
       score: totalScore,
       maxScore,
     };
-  }, [isLoading, articles, gameState.clickedLinks, gameState.scores]);
+  }, [
+    isLoading,
+    articles,
+    gameState.clickedLinks,
+    gameState.scores,
+    currentDate,
+  ]);
 
   // Don't render until articles are loaded
   if (isLoading || articles.length === 0) {
@@ -365,7 +381,13 @@ export const WikiGame: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <header className="mb-6 text-center">
+      <header className="mb-6 text-center relative">
+        <div className="absolute top-0 left-0">
+          <DateSelector
+            onDateSelect={handleDateSelect}
+            currentDate={currentDate}
+          />
+        </div>
         <h1 className="text-3xl font-bold mb-2">
           🌐 Citation Needed 5/26/2025
         </h1>
@@ -378,7 +400,6 @@ export const WikiGame: React.FC = () => {
 
         <div className="flex justify-center items-center gap-2"></div>
       </header>
-
       <GameProgress
         articles={articles}
         currentIndex={gameState.currentArticleIndex}
