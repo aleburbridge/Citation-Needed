@@ -2,188 +2,197 @@ import { Article } from "@/types/wiki-game";
 import { articleGroups } from "./articleHistory";
 import { formatDate } from "@/lib/utils";
 
-// Get articles for today
 export const getArticlesForToday = (): Article[] => {
   return [
     {
       id: "1",
-      title: "Quantum Mechanics",
+      title: "Marie Curie",
       content: [
-        "Quantum mechanics is a fundamental theory in physics that describes the behavior of matter and light at the ",
-        " scale. It was developed in the early ",
-        " century by scientists including ",
+        "Marie Curie was a ",
+        "-born physicist and chemist who conducted pioneering research on ",
+        ". She was the first woman to win a ",
+        " Prize, and the only person to win it in two different fields. She discovered the elements ",
         " and ",
-        ". The theory introduced revolutionary concepts such as ",
-        " and wave-particle duality.",
+        ". Her work with radioactive materials led to the development of ",
+        ".",
       ],
       links: [
         {
-          text: "microscopic",
-          isMistake: false,
-        },
-        {
-          text: "19th",
-          correctAnswer: ["20th", "twentieth", "20"],
+          text: "Russian",
+          correctAnswer: ["Polish", "Poland"],
           isMistake: true,
         },
         {
-          text: "Max Planck",
+          text: "radioactivity",
           isMistake: false,
         },
         {
-          text: "Werner Heisenberg",
+          text: "Nobel",
           isMistake: false,
         },
         {
-          text: "quantum superposition",
+          text: "polonium",
+          isMistake: false,
+        },
+        {
+          text: "radium",
+          isMistake: false,
+        },
+        {
+          text: "X-ray machines",
           isMistake: false,
         },
       ],
-      mistakeIndex: 1,
     },
     {
       id: "2",
-      title: "Ancient Egypt",
+      title: "Colosseum",
       content: [
-        "Ancient Egypt was a civilization in ",
-        " concentrated along the lower reaches of the ",
-        ". It began around ",
-        " BCE and lasted for over 3,000 years. The civilization is known for its ",
-        " and the construction of massive ",
-        ".",
+        "The Colosseum is an elliptical amphitheater in the center of ",
+        ". It is the ",
+        " and held an average of ",
+        " spectators. In Ancient times, the structure was used for ",
+        ", ",
+        ", and ",
+        " reannactments."
       ],
       links: [
         {
-          text: "North Africa",
+          text: "Rome",
           isMistake: false,
         },
         {
-          text: "Tigris River",
-          correctAnswer: ["Nile", "Nile River"],
+          text: "largest standing amphitheatre in the world",
+          isMistake: false,
+        },
+        {
+          text: "65,000",
+          isMistake: false,
+        },
+        {
+          text: "gladiatorial contests",
+          isMistake: false,
+        },
+        {
+          text: "mock sea battles",
+          isMistake: false,
+        },
+        {
+          text: "medieval battle",
+          correctAnswer: ["battle", "ancient", "ancient battle"],
           isMistake: true,
         },
-        {
-          text: "3100",
-          isMistake: false,
-        },
-        {
-          text: "hieroglyphic writing",
-          isMistake: false,
-        },
-        {
-          text: "pyramids",
-          isMistake: false,
-        },
       ],
-      mistakeIndex: 1,
     },
     {
       id: "3",
-      title: "Space Race",
+      title: "Bebop",
       content: [
-        "The Space Race was a 20th-century competition between the ",
-        " and the ",
-        " for supremacy in spaceflight capability. It began with the launch of ",
-        " in 1957 and culminated with the ",
-        " landing in 1969. The competition led to significant advances in ",
-        " and space exploration.",
+        "Bebop is a style of",
+        " that developed in the early to mid ",
+        " in ",
+        ". The style is characterized by fast tempos, complex chord progressions, and ",
+        ". Two leading figures in the development of bebop were ",
+        " and ",
+        "."
       ],
       links: [
         {
-          text: "United States",
+          text: " jazz",
+          isMistake: false
+        },
+        {
+          text: "1940s",
           isMistake: false,
         },
         {
-          text: "Soviet Union",
-          isMistake: false,
-        },
-        {
-          text: "Explorer 1",
-          correctAnswer: ["Sputnik 1", "Sputnik"],
+          text: "Japan",
           isMistake: true,
+          correctAnswer: ["The US", "USA", "the USA", "united states", "the united states", "The united states of america", "america"]
         },
         {
-          text: "Apollo 11",
+          text: "improvisation",
           isMistake: false,
         },
         {
-          text: "rocket technology",
+          text: "Charlie Parker",
+          isMistake: false,
+        },
+        {
+          text: "Dizzy Gillespie",
           isMistake: false,
         },
       ],
-      mistakeIndex: 2,
     },
     {
       id: "4",
-      title: "Great Wall of China",
+      title: "Mount Everest",
       content: [
-        "The Great Wall of China is a series of fortifications in China. Construction began during the ",
-        " and continued for over ",
-        ". The wall stretches for approximately 21,196 kilometers across ",
-        ". It was built primarily to protect against invasions from ",
-        " tribes. The wall's construction involved millions of workers and used materials like ",
-        " and stone.",
+        "Mount Everest is Earth's highest mountain above sea level, located in the ",
+        " mountain range. It stands at ",
+        " meters above sea level. The first successful summit was achieved by ",
+        " and ",
+        " in ",
+        "."
       ],
       links: [
         {
-          text: "Ming Dynasty",
-          correctAnswer: ["Qin", "Qin Dynasty"],
+          text: "Himalayan",
+          isMistake: false,
+        },
+        {
+          text: "8,848",
+          isMistake: false,
+        },
+        {
+          text: "Edmund Hillary",
+          isMistake: false,
+        },
+        {
+          text: "Tenzing Norgay",
+          isMistake: false,
+        },
+        {
+          text: "1943",
+          correctAnswer: ["1953", "nineteen fifty-three"],
           isMistake: true,
-        },
-        {
-          text: "2,000 years",
-          isMistake: false,
-        },
-        {
-          text: "northern China",
-          isMistake: false,
-        },
-        {
-          text: "Mongol",
-          isMistake: false,
-        },
-        {
-          text: "brick",
-          isMistake: false,
-        },
+        }
       ],
-      mistakeIndex: 0,
     },
     {
       id: "5",
-      title: "Theory of Relativity",
+      title: "Internet",
       content: [
-        "Albert Einstein's Theory of Relativity consists of two parts: Special and ",
-        ". The theory was published in ",
-        " and revolutionized our understanding of space and time. One of its most famous equations, ",
-        ", shows the relationship between mass and energy. The theory predicts that time moves ",
-        " in stronger gravitational fields. This was confirmed by experiments using ",
-        ".",
+        "The Internet is a global network of interconnected computers. It began as ",
+        " in the ",
+        ". The World Wide Web was created by ",
+        " in ",
+        ". Today, the Internet enables instant communication through ",
+        " and social media platforms.",
       ],
       links: [
         {
-          text: "  General Relativity",
-          isMistake: false,
-        },
-        {
-          text: "1915",
-          isMistake: false,
-        },
-        {
-          text: "E = mc²",
-          isMistake: false,
-        },
-        {
-          text: "faster",
-          correctAnswer: "slower",
+          text: "SHERPANET",
           isMistake: true,
+          correctAnswer: "ARPANET"
         },
         {
-          text: "atomic clocks",
+          text: "1960s",
+          isMistake: false,
+        },
+        {
+          text: "Tim Berners-Lee",
+          isMistake: false,
+        },
+        {
+          text: "1989",
+          isMistake: false,
+        },
+        {
+          text: "email",
           isMistake: false,
         },
       ],
-      mistakeIndex: 3,
     }
   ];
 };

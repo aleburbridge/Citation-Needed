@@ -89,9 +89,11 @@ export const WikiGame: React.FC = () => {
   useEffect(() => {
     if (articles.length > 0 && !isLoading) {
       const allMistakesFound = articles.every((article) => {
-        if (!article.links || article.mistakeIndex === undefined) return false;
-        const mistakeLink = article.links[article.mistakeIndex];
-        return mistakeLink && gameState.clickedLinks[mistakeLink.id];
+        if (!article.links) return false;
+        const mistakeLink = article.links.find(link => link.isMistake);
+        if (!mistakeLink) return false;
+        const mistakeLinkId = `${article.id}-${article.links.indexOf(mistakeLink)}`;
+        return gameState.clickedLinks[mistakeLinkId];
       });
 
       if (allMistakesFound && !gameState.gameCompleted) {
@@ -152,8 +154,11 @@ export const WikiGame: React.FC = () => {
           // Clicked wrong link - mark as incorrect (0 points)
           updatedScores[prev.currentArticleIndex] = 0;
           // Mark the mistake for this article as clicked to prevent future attempts
-          const mistakeLinkId = `${currentArticle.id}-${currentArticle.mistakeIndex}`;
-          updatedClickedLinks[mistakeLinkId] = true;
+          const mistakeLink = currentArticle.links.find(link => link.isMistake);
+          if (mistakeLink) {
+            const mistakeLinkId = `${currentArticle.id}-${currentArticle.links.indexOf(mistakeLink)}`;
+            updatedClickedLinks[mistakeLinkId] = true;
+          }
         }
 
         return {
@@ -164,19 +169,14 @@ export const WikiGame: React.FC = () => {
       });
 
       if (isMistake) {
-        const mistakeLink = currentArticle.links[currentArticle.mistakeIndex];
+        const mistakeLink = currentArticle.links.find(link => link.isMistake);
         if (mistakeLink) {
           setCurrentMistakeLink(mistakeLink);
           setDialogOpen(true);
-
-          toast({
-            title: "Good eye!",
-            description: "You found the mistake! Now, what's the correct term?",
-          });
         }
       } else {
         // Get the actual mistake link to show what was missed
-        const mistakeLink = currentArticle.links[currentArticle.mistakeIndex];
+        const mistakeLink = currentArticle.links.find(link => link.isMistake);
         if (mistakeLink) {
           toast({
             title: "Incorrect",
@@ -236,9 +236,9 @@ export const WikiGame: React.FC = () => {
 
       // Show toast with feedback
       toast({
-        title: isCorrect ? "Correct! +5 points" : "Not quite right",
+        title: isCorrect ? "Correct!" : "Not quite right",
         description: isCorrect
-          ? "That's exactly right! You've earned 5 more points."
+          ? "+5 points"
           : `The correct answer was "${Array.isArray(currentMistakeLink.correctAnswer) ? currentMistakeLink.correctAnswer[0] : currentMistakeLink.correctAnswer}".`,
         variant: isCorrect ? "default" : "destructive",
       });
@@ -299,13 +299,12 @@ export const WikiGame: React.FC = () => {
     }
 
     const results: GameResult[] = articles.map((article) => {
-      if (!article.links || article.mistakeIndex === undefined)
-        return "unattempted";
+      if (!article.links) return "unattempted";
 
-      const mistakeLink = article.links[article.mistakeIndex];
+      const mistakeLink = article.links.find(link => link.isMistake);
       if (!mistakeLink) return "unattempted";
 
-      const mistakeLinkId = `${article.id}-${article.mistakeIndex}`;
+      const mistakeLinkId = `${article.id}-${article.links.indexOf(mistakeLink)}`;
       if (!gameState.clickedLinks[mistakeLinkId]) return "unattempted";
 
       const articleIndex = articles.findIndex((a) => a.id === article.id);
@@ -353,16 +352,17 @@ export const WikiGame: React.FC = () => {
 
   // Prepare the clickedMistakes array safely for GameProgress
   const clickedMistakes = articles.map((article) => {
-    if (!article.links || article.mistakeIndex === undefined) return false;
-    const mistakeLink = article.links[article.mistakeIndex];
-    const mistakeLinkId = `${article.id}-${article.mistakeIndex}`;
-    return (mistakeLink && gameState.clickedLinks[mistakeLinkId]) || false;
+    if (!article.links) return false;
+    const mistakeLink = article.links.find(link => link.isMistake);
+    if (!mistakeLink) return false;
+    const mistakeLinkId = `${article.id}-${article.links.indexOf(mistakeLink)}`;
+    return gameState.clickedLinks[mistakeLinkId] || false;
   });
 
   return (
     <div className="max-w-4xl mx-auto p-4">
       <header className="mb-6 text-center">
-        <h1 className="text-3xl font-bold mb-2">🌐 Citation Needed (On Pause for the Weekend. New Puzzle 5/26/2025){/*formatDate(new Date())*/}</h1> 
+        <h1 className="text-3xl font-bold mb-2">🌐 Citation Needed 5/26/2025</h1> 
         <p className="text-gray-600 mb-4">
           <i>Click the hyperlink with incorrect information in each Wikipedia passage</i>
         </p>

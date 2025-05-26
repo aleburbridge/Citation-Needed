@@ -3,7 +3,6 @@ export interface Article {
   title: string;
   content: string[];
   links: Link[];
-  mistakeIndex: number;
 }
 
 export interface Link {
@@ -21,7 +20,7 @@ export interface GameState {
   gameCompleted: boolean;
 }
 
-export type GameResult = "correct" | "incorrect" | "partial" | "unattempted";
+export type GameResult = "unattempted" | "partial" | "incorrect" | "correct";
 
 export interface GameResults {
   date: string;

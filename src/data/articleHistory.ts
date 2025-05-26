@@ -8,7 +8,7 @@ export interface ArticleGroup {
 
 export const articleGroups: ArticleGroup[] = [
   {
-    date: formatDate("2025-05-22"),
+    date: formatDate("2025-05-25"),
     articles: [
       {
         id: "1",
@@ -43,7 +43,7 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 1,
+        
       },
       {
         id: "2",
@@ -84,7 +84,7 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 1,
+        
       },
       {
         id: "3",
@@ -119,7 +119,7 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 1,
+        
       },
       {
         id: "4",
@@ -148,7 +148,8 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 1,
+        
+
       },
       {
         id: "5",
@@ -183,7 +184,7 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 2,
+        
       }
     ]
   },
@@ -225,7 +226,7 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 1,
+        
       },
       {
         id: "2",
@@ -261,7 +262,7 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 1,
+      
       },
       {
         id: "3",
@@ -297,7 +298,7 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 2,
+        
       },
       {
         id: "4",
@@ -333,7 +334,7 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 0,
+        
       },
       {
         id: "5",
@@ -369,7 +370,7 @@ export const articleGroups: ArticleGroup[] = [
             isMistake: false,
           },
         ],
-        mistakeIndex: 3,
+        
       }
     ]
   }

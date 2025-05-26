@@ -47,10 +47,9 @@ export const MistakeDialog: React.FC<MistakeDialogProps> = ({
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Good catch! What's the correct term?</DialogTitle>
+            <DialogTitle>Good catch!</DialogTitle>
             <DialogDescription>
-              You found the mistake in this article! Now, enter what you think
-              is the correct term to replace "{mistakeLink.text}".
+              Enter the correct term to replace "{mistakeLink.text}".
             </DialogDescription>
           </DialogHeader>
 
@@ -69,7 +68,7 @@ export const MistakeDialog: React.FC<MistakeDialogProps> = ({
           </div>
 
           <DialogFooter>
-            <Button type="submit">Submit Answer</Button>
+            <Button type="submit">Submit</Button>
           </DialogFooter>
         </form>
       </DialogContent>
