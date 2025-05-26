@@ -11,7 +11,6 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  TooltipProvider,
 } from "@/components/ui/tooltip";
 import { articleGroups } from "@/data/articleHistory";
 import { formatDate } from "@/lib/utils";
@@ -53,35 +52,33 @@ export const DateSelector: React.FC<DateSelectorProps> = ({
   const currentDateObj = new Date(currentDate);
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <Popover open={open} onOpenChange={setOpen}>
-          <TooltipTrigger asChild>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                aria-label="Select puzzle date"
-              >
-                <CalendarIcon className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Play previous puzzles</p>
-          </TooltipContent>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={currentDateObj}
-              onSelect={handleDateSelect}
-              disabled={(date) => !isDateAvailable(date)}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <Popover open={open} onOpenChange={setOpen}>
+        <TooltipTrigger asChild>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+              aria-label="Select puzzle date"
+            >
+              <CalendarIcon className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Play previous puzzles</p>
+        </TooltipContent>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={currentDateObj}
+            onSelect={handleDateSelect}
+            disabled={(date) => !isDateAvailable(date)}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
+    </Tooltip>
   );
 };
