@@ -9,7 +9,158 @@ export interface ArticleGroup {
 // All article groups with their dates and content
 export const articleGroups: ArticleGroup[] = [
   {
-    date: formatDate("2025-05-25"),
+    date: formatDate("2025-05-21"),
+    articles: [
+      {
+        id: "1",
+        title: "World War II",
+        content: [
+          "World War II or the Second World War (1 September 1939 – 2 September 1945) was a global conflict between two coalitions: the ",
+          " and the ",
+          ". It was the largest and deadliest conflict in history, involving more than ",
+          " countries and resulting in 70 to 85 million military and civilian casualties.",
+        ],
+        links: [
+          {
+            id: "ww2-allies",
+            text: "Allies",
+            isMistake: false,
+          },
+          {
+            id: "ww2-axis",
+            text: "Blackshirts",
+            correctAnswer: "Axis",
+            isMistake: true,
+          },
+          {
+            id: "ww2-countries",
+            text: "30",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "2",
+        title: "Emancipation Proclamation",
+        content: [
+          "The Emancipation Proclamation, officially Proclamation ",
+          ", was a presidential proclamation and executive order issued by United States President ",
+          " on January 1, ",
+          ". It changed the legal status of more than 3.5 million enslaved African Americans in the ",
+          " states from enslaved to free.",
+        ],
+        links: [
+          {
+            id: "ep-number",
+            text: "95",
+            isMistake: false,
+          },
+          {
+            id: "ep-president",
+            text: "Abraham Lincoln",
+            isMistake: false,
+          },
+          {
+            id: "ep-date",
+            text: "1763",
+            correctAnswer: "1863",
+            isMistake: true,
+          },
+          {
+            id: "ep-states",
+            text: "Confederate",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "3",
+        title: "Albert Einstein",
+        content: [
+          "Albert Einstein was a ",
+          "-born theoretical physicist who is widely held to be one of the greatest and most influential scientists of all time. Best known for developing the theory of ",
+          ", he also made important contributions to the development of ",
+          " mechanics, statistical mechanics, and cosmology.",
+        ],
+        links: [
+          {
+            id: "ae-origin",
+            text: "German",
+            isMistake: false,
+          },
+          {
+            id: "ae-theory",
+            text: "general astronomy",
+            correctAnswer: "general relativity",
+            isMistake: true,
+          },
+          {
+            id: "ae-field",
+            text: "quantum",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "4",
+        title: "DNA",
+        content: [
+          "Deoxyribonucleic acid (DNA) is a polymer composed of two ",
+          " chains that spiral around each other to form a ",
+          ", carrying genetic instructions for the development, functioning, growth, and reproduction of all known ",
+          " and many viruses.",
+        ],
+        links: [
+          {
+            id: "dna-chains",
+            text: "polynucleotide",
+            isMistake: false,
+          },
+          {
+            id: "dna-structure",
+            text: "double spiral",
+            correctAnswer: "double helix",
+            isMistake: true,
+          },
+          {
+            id: "dna-applies",
+            text: "organisms",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "5",
+        title: "Moon Landing",
+        content: [
+          "The Apollo ",
+          " mission was the first human mission to land on the Moon. The landing took place on July 20, ",
+          ". Commander ",
+          " and lunar module pilot Buzz Aldrin formed the American crew that landed the Apollo Lunar Module Eagle.",
+        ],
+        links: [
+          {
+            id: "ml-mission",
+            text: "11",
+            isMistake: false,
+          },
+          {
+            id: "ml-year",
+            text: "1969",
+            isMistake: false,
+          },
+          {
+            id: "ml-commander",
+            text: "Tom Armstrong",
+            correctAnswer: "Neil Armstrong",
+            isMistake: true,
+          },
+        ],
+      },
+    ]
+  },
+  {
+    date: formatDate("2025-05-22"),
     articles: [
       {
         id: "1",
@@ -374,205 +525,206 @@ export const articleGroups: ArticleGroup[] = [
       },
     ],
   },
-];
-
-// Default articles for today (current puzzle set)
-const todayArticles: Article[] = [
   {
-    id: "1",
-    title: "Marie Curie",
-    content: [
-      "Marie Curie was a ",
-      "-born physicist and chemist who conducted pioneering research on ",
-      ". She was the first woman to win a ",
-      " Prize, and the only person to win it in two different fields. She discovered the elements ",
-      " and ",
-      ". Her work with radioactive materials led to the development of ",
-      ".",
-    ],
-    links: [
+    date: formatDate("2025-05-26"),
+    articles: [
       {
-        text: "Russian",
-        correctAnswer: ["Polish", "Poland"],
-        isMistake: true,
-      },
-      {
-        text: "radioactivity",
-        isMistake: false,
-      },
-      {
-        text: "Nobel",
-        isMistake: false,
-      },
-      {
-        text: "polonium",
-        isMistake: false,
-      },
-      {
-        text: "radium",
-        isMistake: false,
-      },
-      {
-        text: "X-ray machines",
-        isMistake: false,
-      },
-    ],
-  },
-  {
-    id: "2",
-    title: "Colosseum",
-    content: [
-      "The Colosseum is an elliptical amphitheater in the center of ",
-      ". It is the ",
-      " and held an average of ",
-      " spectators. In Ancient times, the structure was used for ",
-      ", ",
-      ", and ",
-      " reannactments.",
-    ],
-    links: [
-      {
-        text: "Rome",
-        isMistake: false,
-      },
-      {
-        text: "largest standing amphitheatre in the world",
-        isMistake: false,
-      },
-      {
-        text: "65,000",
-        isMistake: false,
-      },
-      {
-        text: "gladiatorial contests",
-        isMistake: false,
-      },
-      {
-        text: "mock sea battles",
-        isMistake: false,
-      },
-      {
-        text: "medieval battle",
-        correctAnswer: ["battle", "ancient", "ancient battle"],
-        isMistake: true,
-      },
-    ],
-  },
-  {
-    id: "3",
-    title: "Bebop",
-    content: [
-      "Bebop is a style of",
-      " that developed in the early to mid ",
-      " in ",
-      ". The style is characterized by fast tempos, complex chord progressions, and ",
-      ". Two leading figures in the development of bebop were ",
-      " and ",
-      ".",
-    ],
-    links: [
-      {
-        text: " jazz",
-        isMistake: false,
-      },
-      {
-        text: "1940s",
-        isMistake: false,
-      },
-      {
-        text: "Japan",
-        isMistake: true,
-        correctAnswer: [
-          "The US",
-          "USA",
-          "the USA",
-          "united states",
-          "the united states",
-          "The united states of america",
-          "america",
+        id: "1",
+        title: "Marie Curie",
+        content: [
+          "Marie Curie was a ",
+          "-born physicist and chemist who conducted pioneering research on ",
+          ". She was the first woman to win a ",
+          " Prize, and the only person to win it in two different fields. She discovered the elements ",
+          " and ",
+          ". Her work with radioactive materials led to the development of ",
+          ".",
+        ],
+        links: [
+          {
+            text: "Russian",
+            correctAnswer: ["Polish", "Poland"],
+            isMistake: true,
+          },
+          {
+            text: "radioactivity",
+            isMistake: false,
+          },
+          {
+            text: "Nobel",
+            isMistake: false,
+          },
+          {
+            text: "polonium",
+            isMistake: false,
+          },
+          {
+            text: "radium",
+            isMistake: false,
+          },
+          {
+            text: "X-ray machines",
+            isMistake: false,
+          },
         ],
       },
       {
-        text: "improvisation",
-        isMistake: false,
+        id: "2",
+        title: "Colosseum",
+        content: [
+          "The Colosseum is an elliptical amphitheater in the center of ",
+          ". It is the ",
+          " and held an average of ",
+          " spectators. In Ancient times, the structure was used for ",
+          ", ",
+          ", and ",
+          " reannactments.",
+        ],
+        links: [
+          {
+            text: "Rome",
+            isMistake: false,
+          },
+          {
+            text: "largest standing amphitheatre in the world",
+            isMistake: false,
+          },
+          {
+            text: "65,000",
+            isMistake: false,
+          },
+          {
+            text: "gladiatorial contests",
+            isMistake: false,
+          },
+          {
+            text: "mock sea battles",
+            isMistake: false,
+          },
+          {
+            text: "medieval battle",
+            correctAnswer: ["battle", "ancient", "ancient battle"],
+            isMistake: true,
+          },
+        ],
       },
       {
-        text: "Charlie Parker",
-        isMistake: false,
+        id: "3",
+        title: "Bebop",
+        content: [
+          "Bebop is a style of",
+          " that developed in the early to mid ",
+          " in ",
+          ". The style is characterized by fast tempos, complex chord progressions, and ",
+          ". Two leading figures in the development of bebop were ",
+          " and ",
+          ".",
+        ],
+        links: [
+          {
+            text: " jazz",
+            isMistake: false,
+          },
+          {
+            text: "1940s",
+            isMistake: false,
+          },
+          {
+            text: "Japan",
+            isMistake: true,
+            correctAnswer: [
+              "The US",
+              "USA",
+              "the USA",
+              "united states",
+              "the united states",
+              "The united states of america",
+              "america",
+            ],
+          },
+          {
+            text: "improvisation",
+            isMistake: false,
+          },
+          {
+            text: "Charlie Parker",
+            isMistake: false,
+          },
+          {
+            text: "Dizzy Gillespie",
+            isMistake: false,
+          },
+        ],
       },
       {
-        text: "Dizzy Gillespie",
-        isMistake: false,
-      },
-    ],
-  },
-  {
-    id: "4",
-    title: "Mount Everest",
-    content: [
-      "Mount Everest is Earth's highest mountain above sea level, located in the ",
-      " mountain range. It stands at ",
-      " meters above sea level. The first successful summit was achieved by ",
-      " and ",
-      " in ",
-      ".",
-    ],
-    links: [
-      {
-        text: "Himalayan",
-        isMistake: false,
-      },
-      {
-        text: "8,848",
-        isMistake: false,
-      },
-      {
-        text: "Edmund Hillary",
-        isMistake: false,
-      },
-      {
-        text: "Tenzing Norgay",
-        isMistake: false,
-      },
-      {
-        text: "1943",
-        correctAnswer: ["1953", "nineteen fifty-three"],
-        isMistake: true,
-      },
-    ],
-  },
-  {
-    id: "5",
-    title: "Internet",
-    content: [
-      "The Internet is a global network of interconnected computers. It began as ",
-      " in the ",
-      ". The World Wide Web was created by ",
-      " in ",
-      ". Today, the Internet enables instant communication through ",
-      " and social media platforms.",
-    ],
-    links: [
-      {
-        text: "SHERPANET",
-        isMistake: true,
-        correctAnswer: "ARPANET",
+        id: "4",
+        title: "Mount Everest",
+        content: [
+          "Mount Everest is Earth's highest mountain above sea level, located in the ",
+          " mountain range. It stands at ",
+          " meters above sea level. The first successful summit was achieved by ",
+          " and ",
+          " in ",
+          ".",
+        ],
+        links: [
+          {
+            text: "Himalayan",
+            isMistake: false,
+          },
+          {
+            text: "8,848",
+            isMistake: false,
+          },
+          {
+            text: "Edmund Hillary",
+            isMistake: false,
+          },
+          {
+            text: "Tenzing Norgay",
+            isMistake: false,
+          },
+          {
+            text: "1943",
+            correctAnswer: ["1953", "nineteen fifty-three"],
+            isMistake: true,
+          },
+        ],
       },
       {
-        text: "1960s",
-        isMistake: false,
-      },
-      {
-        text: "Tim Berners-Lee",
-        isMistake: false,
-      },
-      {
-        text: "1989",
-        isMistake: false,
-      },
-      {
-        text: "email",
-        isMistake: false,
+        id: "5",
+        title: "Internet",
+        content: [
+          "The Internet is a global network of interconnected computers. It began as ",
+          " in the ",
+          ". The World Wide Web was created by ",
+          " in ",
+          ". Today, the Internet enables instant communication through ",
+          " and social media platforms.",
+        ],
+        links: [
+          {
+            text: "SHERPANET",
+            isMistake: true,
+            correctAnswer: "ARPANET",
+          },
+          {
+            text: "1960s",
+            isMistake: false,
+          },
+          {
+            text: "Tim Berners-Lee",
+            isMistake: false,
+          },
+          {
+            text: "1989",
+            isMistake: false,
+          },
+          {
+            text: "email",
+            isMistake: false,
+          },
+        ],
       },
     ],
   },
@@ -584,7 +736,8 @@ const todayArticles: Article[] = [
  * Get articles for today's puzzle
  */
 export const getArticlesForToday = (): Article[] => {
-  return todayArticles;
+  const today = formatDate(new Date());
+  return getArticlesForDate(today);
 };
 
 /**
@@ -592,7 +745,7 @@ export const getArticlesForToday = (): Article[] => {
  */
 export const getArticlesForDate = (dateString: string): Article[] => {
   const articleGroup = articleGroups.find((group) => group.date === dateString);
-  return articleGroup ? articleGroup.articles : getArticlesForToday();
+  return articleGroup ? articleGroup.articles : articleGroups[0].articles;
 };
 
 /**
