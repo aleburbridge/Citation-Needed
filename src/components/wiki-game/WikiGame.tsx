@@ -381,18 +381,16 @@ export const WikiGame: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <header className="mb-6 text-center relative">
+      <header className="mb-3 text-center relative">
         <h1 className="text-3xl font-bold mb-2">
-          Citation Needed {currentDate} <DateSelector
+          Citation Needed {currentDate}{" "}
+          <DateSelector
             onDateSelect={handleDateSelect}
             currentDate={currentDate}
-          /> 
+          />
         </h1>
         <p className="text-gray-600 mb-4">
-          <i>
-            Click the hyperlink with incorrect information in each Wikipedia
-            passage
-          </i>
+          <i>Find the incorrect information in each Wikipedia passage</i>
         </p>
 
         <div className="flex justify-center items-center gap-2"></div>
