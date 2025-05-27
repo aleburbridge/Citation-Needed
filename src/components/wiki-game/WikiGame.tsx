@@ -390,10 +390,7 @@ export const WikiGame: React.FC = () => {
           />
         </h1>
         <p className="text-gray-600 mb-4">
-          <i>
-            Click the hyperlink with incorrect information in each Wikipedia
-            passage
-          </i>
+          <i>Find the incorrect information in each Wikipedia passage</i>
         </p>
 
         <div className="flex justify-center items-center gap-2"></div>
