@@ -64,7 +64,7 @@ export const Article: React.FC<ArticleProps> = ({
                 tabIndex={0}
               >
                 {link.text}
-                <Edit3 className="w-3 h-3 hidden md:inline ml-0.5 text-gray-400" />
+                <Edit3 className="w-3 h-3 hidden md:inline text-gray-400" />
               </span>
             </React.Fragment>
           );
