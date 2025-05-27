@@ -728,16 +728,221 @@ export const articleGroups: ArticleGroup[] = [
       },
     ],
   },
+  {
+    date: formatDate("2025-05-27"),
+    articles: [
+      {
+        id: "1",
+        title: "Vincent van Gogh",
+        content: [
+          "Vincent van Gogh was a ",
+          " Post-Impressionist artist who created about ",
+          " paintings in his lifetime. Despite selling only one painting, ",
+          ", during his lifetime, his works now sell for millions. His most famous works include ",
+          " and ",
+          ".",
+        ],
+        links: [
+          {
+            text: "German",
+            isMistake: true,
+            correctAnswer: ["Dutch", "Dutchman"]
+          },
+          {
+            text: "2,100",
+            isMistake: false,
+          },
+          {
+            text: "The Red Vineyard",
+            isMistake: false,
+          },
+          {
+            text: "The Starry Night",
+            isMistake: false,
+          },
+          {
+            text: "Sunflowers",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "2",
+        title: "Great Barrier Reef",
+        content: [
+          "The Great Barrier Reef is the world's largest ",
+          " system, located off the coast of ",
+          ". It consists of over 2,900 reefs and 900 islands. It is a ",
+          " and one of ",
+          "."
+        ],
+        links: [
+          {
+            text: "coral reef",
+            isMistake: false,
+          },
+          {
+            text: "New Zealand",
+            correctAnswer: ["Australia", "Queensland"],
+            isMistake: true,
+          },
+          {
+            text: "World Heritage Site",
+            isMistake: false
+          },
+          {
+            text: "CNN's Seven Natural Wonders of the World",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "3",
+        title: "Electric Guitar",
+        content: [
+          "The electric guitar was developed in the ",
+          " century and became popular in the ",
+          ". It uses ",
+          " to convert string vibrations into ",
+          ". The first commercially successful electric guitar was the ",
+          ", produced by ",
+          "."
+        ],
+        links: [
+          {
+            text: "20th",
+            isMistake: false,
+          },
+          {
+            text: "1930s",
+            isMistake: false,
+          },
+          {
+            text: "electromagnetic pickups",
+            isMistake: false
+          },
+          {
+            text: "electric signals",
+            isMistake: false
+          },
+          {
+            text: "Steel Wok",
+            isMistake: true,
+            correctAnswer: ["frying pan", "the frying pan", "Rickenbacker Electro A-22", "Electro a-22", "a-22", "rickenbacker a-22", "a22", "Rickenbacker electro a22", "rickenbacker a22"]
+          },
+          {
+            text: "Rickenbacker",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "4",
+        title: "Mount Kilimanjaro",
+        content: [
+          "Mount Kilimanjaro is ",
+          "'s highest mountain, located in ",
+          ". It stands at ",
+          " meters above sea level. The mountain has three volcanic cones: ",
+          ", Mawenzi, and Shira. The first successful summit was achieved by ",
+          " in ",
+          ".",
+        ],
+        links: [
+          {
+            text: "Africa",
+            isMistake: false,
+          },
+          {
+            text: "Kenya",
+            correctAnswer: ["Tanzania", "United republic of tanzania", "republic of tanzania"],
+            isMistake: true,
+          },
+          {
+            text: "5,895",
+            isMistake: false,
+          },
+          {
+            text: "Kibo",
+            isMistake: false,
+          },
+          {
+            text: "Hans Meyer",
+            isMistake: false,
+          },
+          {
+            text: "1889",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "5",
+        title: "Printing Press",
+        content: [
+          "The printing press was invented by ",
+          " in ",
+          " century Germany. This revolutionary device used ",
+          " to transfer ink onto paper or cloth. Its use in the ",
+          " introduced the era of mass communication, which permanently altered the structure of society. The invention dramatically increased the spread of knowledge across ",
+          ".",
+        ],
+        links: [
+          {
+            text: "Johannes Gutenberg",
+            isMistake: false,
+          },
+          {
+            text: "16th",
+            correctAnswer: ["15th", "fifteenth"],
+            isMistake: true,
+          },
+          {
+            text: "movable type",
+            isMistake: false,
+          },
+          {
+            text: "Renaissance",
+            isMistake: false,
+          },
+          {
+            text: "Europe",
+            isMistake: false,
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 // === EXPORTED FUNCTIONS ===
 
 /**
+ * Get the current date in EST timezone
+ */
+const getCurrentESTDate = (): Date => {
+  const now = new Date();
+  const estOffset = -5; // EST is UTC-5
+  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  return new Date(utc + (3600000 * estOffset));
+};
+
+/**
  * Get articles for today's puzzle
  */
 export const getArticlesForToday = (): Article[] => {
-  const today = formatDate(new Date());
-  return getArticlesForDate(today);
+  const today = formatDate(getCurrentESTDate());
+  const articleGroup = articleGroups.find((group) => group.date === today);
+  
+  // If no article group exists for today, return the most recent article group
+  if (!articleGroup) {
+    const sortedGroups = [...articleGroups].sort((a, b) => 
+      new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    return sortedGroups[0].articles;
+  }
+  
+  return articleGroup.articles;
 };
 
 /**
@@ -759,7 +964,7 @@ export const getAvailableDates = (): string[] => {
  * Get storage key for today's game progress
  */
 export const getGameStorageKey = (): string => {
-  return `wiki_game_${formatDate(new Date())}`;
+  return `wiki_game_${formatDate(getCurrentESTDate())}`;
 };
 
 /**
