@@ -38,13 +38,18 @@ export const Article: React.FC<ArticleProps> = ({
               <span>{text}</span>
               <span
                 className={cn(
-                  "cursor-pointer inline-block rounded-md transition-all duration-200 touch-manipulation",
-                  "px-2 py-1 mx-1 my-0.5 min-h-[44px] flex items-center",
+                  "cursor-pointer transition-all duration-200 touch-manipulation",
+                  // Mobile/tablet button styling (default up to md breakpoint)
+                  "inline-block rounded-md px-2 py-1 mx-1 my-0.5 min-h-[44px] flex items-center",
                   "text-sm font-medium border-2",
+                  // Desktop link styling (md breakpoint and up)
+                  "md:inline md:rounded-none md:px-0 md:py-0 md:mx-0 md:my-0 md:min-h-0 md:border-0",
+                  "md:text-base md:font-normal",
                   isLinkClicked && link.isMistake
-                    ? "text-red-600 line-through bg-red-50 border-red-200"
-                    : "text-blue-700 bg-blue-50 border-blue-200 hover:bg-blue-100 hover:border-blue-300 active:bg-blue-200",
-                  !isLinkClicked && "shadow-sm hover:shadow-md",
+                    ? "text-red-600 line-through bg-red-50 border-red-200 md:bg-transparent"
+                    : "text-blue-700 bg-blue-50 border-blue-200 hover:bg-blue-100 hover:border-blue-300 active:bg-blue-200 md:bg-transparent md:border-transparent md:text-blue-600 md:underline md:decoration-blue-600 md:underline-offset-2 md:hover:bg-blue-100",
+                  !isLinkClicked &&
+                    "shadow-sm hover:shadow-md md:shadow-none md:hover:shadow-none",
                 )}
                 onClick={() =>
                   !isLinkClicked && onLinkClick(linkId, link.isMistake)
@@ -87,7 +92,7 @@ export const Article: React.FC<ArticleProps> = ({
           </div>
         </div>
       </div>
-      <p className="text-gray-700 leading-loose text-base sm:text-lg">
+      <p className="text-gray-700 leading-loose md:leading-relaxed text-base sm:text-lg md:text-base">
         {renderArticleContent()}
       </p>
     </div>
