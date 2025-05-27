@@ -38,11 +38,13 @@ export const Article: React.FC<ArticleProps> = ({
               <span>{text}</span>
               <span
                 className={cn(
-                  "cursor-pointer",
+                  "cursor-pointer inline-block rounded-md transition-all duration-200 touch-manipulation",
+                  "px-2 py-1 mx-1 my-0.5 min-h-[44px] flex items-center",
+                  "text-sm font-medium border-2",
                   isLinkClicked && link.isMistake
-                    ? "text-red-500 line-through"
-                    : "text-blue-600 underline decoration-blue-600 underline-offset-2",
-                  !isLinkClicked && "hover:bg-blue-100",
+                    ? "text-red-600 line-through bg-red-50 border-red-200"
+                    : "text-blue-700 bg-blue-50 border-blue-200 hover:bg-blue-100 hover:border-blue-300 active:bg-blue-200",
+                  !isLinkClicked && "shadow-sm hover:shadow-md",
                 )}
                 onClick={() =>
                   !isLinkClicked && onLinkClick(linkId, link.isMistake)
@@ -85,7 +87,9 @@ export const Article: React.FC<ArticleProps> = ({
           </div>
         </div>
       </div>
-      <p className="text-gray-700 leading-relaxed">{renderArticleContent()}</p>
+      <p className="text-gray-700 leading-loose text-base sm:text-lg">
+        {renderArticleContent()}
+      </p>
     </div>
   );
 };
