@@ -44,11 +44,11 @@ export const Article: React.FC<ArticleProps> = ({
                   "inline-block rounded-md px-3 py-2 mx-1 my-0.5 min-h-[52px] flex items-center",
                   "text-sm font-medium border-2",
                   // Desktop link styling (md breakpoint and up)
-                  "md:inline md:rounded-none md:px-0 md:py-0 md:mx-0 md:my-0 md:min-h-0 md:border-0",
+                  "md:inline-flex md:rounded-none md:px-0 md:py-0 md:mx-0 md:my-0 md:min-h-0 md:border-0 md:items-center md:gap-1",
                   "md:text-base md:font-normal",
                   isLinkClicked && link.isMistake
                     ? "text-red-600 line-through bg-red-50 border-red-200 md:bg-transparent"
-                    : "text-blue-700 bg-blue-50 border-blue-200 hover:bg-blue-100 hover:border-blue-300 active:bg-blue-200 md:bg-transparent md:border-transparent md:text-blue-600 md:underline md:decoration-blue-600 md:underline-offset-2 md:hover:bg-blue-100",
+                    : "text-blue-700 bg-blue-50 border-blue-200 hover:bg-blue-100 hover:border-blue-300 active:bg-blue-200 md:bg-transparent md:border-transparent md:text-gray-600 md:underline md:decoration-gray-600 md:underline-offset-2 md:hover:bg-gray-100 md:hover:text-gray-800",
                   !isLinkClicked &&
                     "shadow-sm hover:shadow-md md:shadow-none md:hover:shadow-none",
                 )}
@@ -64,6 +64,7 @@ export const Article: React.FC<ArticleProps> = ({
                 tabIndex={0}
               >
                 {link.text}
+                <Edit3 className="w-3 h-3 hidden md:inline ml-0.5 text-gray-400" />
               </span>
             </React.Fragment>
           );
