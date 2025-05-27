@@ -71,12 +71,10 @@ export const Article: React.FC<ArticleProps> = ({
           <div className="flex flex-col w-full">
             <div className="flex flex-row">
               <h1 className="text-2xl font-bold mb-4 text-gray-900">{title}</h1>
-              <div className="flex flex-col w-full max-sm:w-1/4 max-sm:ml-3">
+              <div className="flex flex-row w-1/4 justify-end items-start ml-auto">
                 {totalScore !== undefined && maxScore !== undefined && (
                   <p className="font-medium flex justify-end ml-auto items-center">
-                    <span className="max-sm:pr-1.5">
-                      <p>Score: </p>
-                    </span>
+                    <span className="font-medium">Score: </span>
                     <span>{totalScore}</span>
                     <span>/</span>
                     <span>{maxScore}</span>
