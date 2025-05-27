@@ -40,7 +40,7 @@ export const Article: React.FC<ArticleProps> = ({
                 className={cn(
                   "cursor-pointer transition-all duration-200 touch-manipulation",
                   // Mobile/tablet button styling (default up to md breakpoint)
-                  "inline-block rounded-md px-2 py-1 mx-1 my-0.5 min-h-[44px] flex items-center",
+                  "inline-block rounded-md px-3 py-2 mx-1 my-0.5 min-h-[52px] flex items-center",
                   "text-sm font-medium border-2",
                   // Desktop link styling (md breakpoint and up)
                   "md:inline md:rounded-none md:px-0 md:py-0 md:mx-0 md:my-0 md:min-h-0 md:border-0",
