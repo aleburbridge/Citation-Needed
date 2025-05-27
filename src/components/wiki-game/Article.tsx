@@ -1,6 +1,7 @@
 import React from "react";
 import { Article as ArticleType, Link as LinkType } from "@/types/wiki-game";
 import { cn } from "@/lib/utils";
+import { Edit3 } from "lucide-react";
 
 interface ArticleProps {
   article: ArticleType;
