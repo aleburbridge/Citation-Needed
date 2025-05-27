@@ -67,19 +67,23 @@ export const Article: React.FC<ArticleProps> = ({
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <div className="flex flex-col">
-        <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-          <div className="flex flex-col w-1/2 max-md:ml-0 max-md:w-full">
-            <h1 className="text-2xl font-bold mb-4 text-gray-900">{title}</h1>
-          </div>
-          <div className="flex flex-col w-1/2 ml-5 max-md:ml-0 max-md:w-full">
-            {totalScore !== undefined && maxScore !== undefined && (
-              <p className="font-medium flex justify-end ml-auto items-center">
-                <span>Score: </span>
-                <span>{totalScore}</span>
-                <span>/</span>
-                <span>{maxScore}</span>
-              </p>
-            )}
+        <div className="flex flex-col">
+          <div className="flex flex-col w-full">
+            <div className="flex flex-row">
+              <h1 className="text-2xl font-bold mb-4 text-gray-900">{title}</h1>
+              <div className="flex flex-col w-full max-sm:w-1/4 max-sm:ml-3">
+                {totalScore !== undefined && maxScore !== undefined && (
+                  <p className="font-medium flex justify-end ml-auto items-center">
+                    <span className="max-sm:pr-1.5">
+                      <p>Score: </p>
+                    </span>
+                    <span>{totalScore}</span>
+                    <span>/</span>
+                    <span>{maxScore}</span>
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
