@@ -913,6 +913,181 @@ export const articleGroups: ArticleGroup[] = [
       },
     ],
   },
+  {
+    date: formatDate("2025-05-28"),
+    articles: [
+      {
+        id: "1",
+        title: "Mona Lisa",
+        content: [
+          "The Mona Lisa is a half-length portrait painting by Italian artist ",
+          ". It is a ",
+          " painting on a white poplar panel. It is considered an archetypal masterpiece of the ",
+          " period. The painting is currently housed in the ",
+          " in Paris. The painting was created in the early ",
+          "."
+        ],
+        links: [
+          {
+            text: "Leonardo da Vinci",
+            isMistake: true,
+          },
+          {
+            text: "fresco",
+            isMistake: true,
+            correctAnswer: ["oil"]
+          },
+          {
+            text: "Renaissance",
+            isMistake: false,
+          },
+          {
+            text: "Louvre Museum",
+            isMistake: false,
+          },
+          {
+            text: "1500s",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "2",
+        title: "Nelson Mandela",
+        content: [
+          "Nelson Mandela was a ",
+          " anti-apartheid revolutionary and political leader who served as the first ",
+          " of South Africa from 1994 to 1999. He spent ",
+          " years in prison for his activism. Mandela received the ",
+          " Peace Prize in 1993. Ideallogically, he was an ",
+          " and a ",
+          ".",
+        ],
+        links: [
+          {
+            text: "South African",
+            isMistake: false,
+          },
+          {
+            text: "prime minister",
+            correctAnswer: "president",
+            isMistake: true,
+          },
+          {
+            text: "27",
+            isMistake: false,
+          },
+          {
+            text: "Nobel",
+            isMistake: false,
+          },
+          {
+            text: "African Nationalist",
+            isMistake: false,
+          },
+          {
+            text: "socialist",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "3",
+        title: "Great Depression",
+        content: [
+          "The Great Depression was a severe worldwide economic depression that took place during the ",
+          ". It began in the United States after a major stock market crash in ",
+          ". Unemployment in the U.S. rose to ",
+          " percent. The Depression was ended by the outbreak of ",
+          "."
+        ],
+        links: [
+          {
+            text: "1930s",
+            isMistake: false,
+          },
+          {
+            text: "October 1929",
+            isMistake: false,
+          },
+          {
+            text: "25",
+            isMistake: false,
+          },
+          { 
+            text: "World War I",
+            isMistake: true,
+            correctAnswer: ["World War II", "WWII", "world war 2"],
+          }
+        ],
+      },
+      {
+        id: "4",
+        title: "Human Brain",
+        content: [
+          "The human brain is the central organ of the human nervous system. It weighs ",
+          " on average and is protected by the ",
+          ". The brain is divided into 3 parts, the largest part being the ",
+          ". The cells of the brain include neurons and ",
+          "."
+        ],
+        links: [
+          {
+            text: "3 lbs",
+            isMistake: false,
+          },
+          {
+            text: "skull",
+            isMistake: false,
+          },
+          {
+            text: "cerebellum",
+            isMistake: true,
+            correctAnswer: ["cerebrum"]
+          },
+          {
+            text: "glial cells",
+            isMistake: false
+          },
+        ],
+      },
+      {
+        id: "5",
+        title: "Taj Mahal",
+        content: [
+          "The Taj Mahal is an ivory-white ",
+          " mausoleum in ",
+          ", India. It was commissioned in ",
+          " by the Mughal emperor Shah Jahan to house the tomb of his favorite wife, ",
+          ". The construction took approximately ",
+          " years to complete."
+        ],
+        links: [
+          {
+            text: "stone",
+            isMistake: true,
+            correctAnswer: ["marble"]
+          },
+          {
+            text: "Agra",
+            isMistake: false,
+          },
+          {
+            text: "1631",
+            isMistake: false,
+          },
+          {
+            text: "Mumtaz Mahal",
+            isMistake: false,
+          },
+          {
+            text: "22",
+            isMistake: false,
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 // === EXPORTED FUNCTIONS ===
