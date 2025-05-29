@@ -18,6 +18,24 @@ interface WikipediaApiResponse {
           height: number;
         };
         pageimage?: string;
+        images?: Array<{
+          title: string;
+        }>;
+      };
+    };
+  };
+}
+
+interface WikipediaImageInfoResponse {
+  query: {
+    pages: {
+      [pageId: string]: {
+        imageinfo?: Array<{
+          url: string;
+          descriptionurl: string;
+          width: number;
+          height: number;
+        }>;
       };
     };
   };
