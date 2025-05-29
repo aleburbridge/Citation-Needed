@@ -20,6 +20,11 @@ export const Article: React.FC<ArticleProps> = ({
   maxScore,
 }) => {
   const { content, links, title } = article;
+  const {
+    imageUrl,
+    isLoading: imageLoading,
+    error: imageError,
+  } = useWikipediaImage(title);
 
   const renderArticleContent = () => {
     return (
