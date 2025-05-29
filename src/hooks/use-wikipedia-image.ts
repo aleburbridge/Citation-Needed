@@ -233,5 +233,12 @@ export const clearWikipediaImageCache = (): void => {
  * Utility function to get cache size (useful for debugging)
  */
 export const getWikipediaImageCacheSize = (): number => {
-  return imageCache.size();
+  return imageCache.size;
+};
+
+/**
+ * Utility function to check if a specific title is cached
+ */
+export const isWikipediaImageCached = (title: string): boolean => {
+  return imageCache.has(title.trim());
 };
