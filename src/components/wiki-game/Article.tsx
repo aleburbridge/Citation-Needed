@@ -1,7 +1,8 @@
 import React from "react";
 import { Article as ArticleType, Link as LinkType } from "@/types/wiki-game";
 import { cn } from "@/lib/utils";
-import { Edit3 } from "lucide-react";
+import { Edit3, ImageIcon, Loader2 } from "lucide-react";
+import { useWikipediaImage } from "@/hooks/use-wikipedia-image";
 
 interface ArticleProps {
   article: ArticleType;
@@ -19,6 +20,11 @@ export const Article: React.FC<ArticleProps> = ({
   maxScore,
 }) => {
   const { content, links, title } = article;
+  const {
+    imageUrl,
+    isLoading: imageLoading,
+    error: imageError,
+  } = useWikipediaImage(title);
 
   const renderArticleContent = () => {
     return (
@@ -73,8 +79,71 @@ export const Article: React.FC<ArticleProps> = ({
     );
   };
 
+  const renderWikipediaImage = () => {
+    if (imageLoading) {
+      return (
+        <div
+          className="w-full sm:w-64 bg-gray-100 rounded-lg flex items-center justify-center mb-4 sm:mb-0 sm:mr-6 flex-shrink-0"
+          style={{ minHeight: "120px" }}
+        >
+          <div className="flex flex-col items-center gap-2 text-gray-500">
+            <Loader2 className="w-6 h-6 animate-spin" />
+            <span className="text-sm">Loading image...</span>
+          </div>
+        </div>
+      );
+    }
+
+    if (imageError || !imageUrl) {
+      return (
+        <div
+          className="w-full sm:w-64 bg-gray-100 rounded-lg flex items-center justify-center mb-4 sm:mb-0 sm:mr-6 flex-shrink-0"
+          style={{ minHeight: "120px" }}
+        >
+          <div className="flex flex-col items-center gap-2 text-gray-400">
+            <ImageIcon className="w-8 h-8" />
+            <span className="text-xs text-center px-2">No image available</span>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="w-full sm:w-64 mb-4 sm:mb-0 sm:mr-6 flex-shrink-0">
+        <img
+          src={imageUrl}
+          alt={`Wikipedia image for ${title}`}
+          className="w-full rounded-lg shadow-sm"
+          style={{
+            maxHeight: "300px",
+            height: "auto",
+            objectFit: "contain",
+          }}
+          onError={(e) => {
+            // Fallback for broken images
+            const target = e.target as HTMLImageElement;
+            target.style.display = "none";
+            const parent = target.parentElement;
+            if (parent) {
+              parent.innerHTML = `
+                <div class="w-full bg-gray-100 rounded-lg flex items-center justify-center" style="min-height: 120px;">
+                  <div class="flex flex-col items-center gap-2 text-gray-400">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="text-xs text-center px-2">Image unavailable</span>
+                  </div>
+                </div>
+              `;
+            }
+          }}
+        />
+      </div>
+    );
+  };
+
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <div className="flex flex-col">
         <div className="flex flex-col">
           <div className="flex flex-col w-full">
@@ -94,9 +163,19 @@ export const Article: React.FC<ArticleProps> = ({
           </div>
         </div>
       </div>
-      <p className="text-gray-700 leading-loose md:leading-relaxed text-base sm:text-lg md:text-base">
-        {renderArticleContent()}
-      </p>
+
+      {/* Content with image layout */}
+      <div className="flex flex-col sm:flex-row">
+        {/* Wikipedia Image */}
+        {renderWikipediaImage()}
+
+        {/* Article Content */}
+        <div className="flex-1">
+          <p className="text-gray-700 leading-loose md:leading-relaxed text-base sm:text-lg md:text-base">
+            {renderArticleContent()}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
