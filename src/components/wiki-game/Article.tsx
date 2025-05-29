@@ -1,7 +1,8 @@
 import React from "react";
 import { Article as ArticleType, Link as LinkType } from "@/types/wiki-game";
 import { cn } from "@/lib/utils";
-import { Edit3 } from "lucide-react";
+import { Edit3, ImageIcon, Loader2 } from "lucide-react";
+import { useWikipediaImage } from "@/hooks/use-wikipedia-image";
 
 interface ArticleProps {
   article: ArticleType;
