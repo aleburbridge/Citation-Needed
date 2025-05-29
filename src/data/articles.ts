@@ -612,7 +612,7 @@ export const articleGroups: ArticleGroup[] = [
         id: "3",
         title: "Bebop",
         content: [
-          "Bebop is a style of",
+          "Bebop is a style of ",
           " that developed in the early to mid ",
           " in ",
           ". The style is characterized by fast tempos, complex chord progressions, and ",
@@ -930,12 +930,12 @@ export const articleGroups: ArticleGroup[] = [
         links: [
           {
             text: "Leonardo da Vinci",
-            isMistake: true,
+            isMistake: false,
           },
           {
             text: "fresco",
             isMistake: true,
-            correctAnswer: ["oil"]
+            correctAnswer: "oil"
           },
           {
             text: "Renaissance",
@@ -1082,6 +1082,181 @@ export const articleGroups: ArticleGroup[] = [
           },
           {
             text: "22",
+            isMistake: false,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    date: formatDate("2025-05-29"),
+    articles: [
+      {
+        id: "1",
+        title: "Sistine Chapel",
+        content: [
+          "The Sistine Chapel is a chapel in the Apostolic Palace in ",
+          ". Its ceiling was painted by ",
+          " between ",
+          " and 1512. The most famous section is ",
+          ", which depicts the creation of ",
+          "."
+        ],
+        links: [
+          {
+            text: "Vatican City",
+            isMistake: false,
+          },
+          {
+            text: "Michelangelo",
+            isMistake: false,
+          },
+          {
+            text: "1508",
+            isMistake: false,
+          },
+          {
+            text: "The Last Judgment",
+            isMistake: true,
+            correctAnswer: ["The Creation of Adam", "creation of adam", "michaelangelo's creation of adam"]
+          },
+          {
+            text: "Adam",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "2",
+        title: "Periodic Table",
+        content: [
+          "The Periodic Table is a tabular arrangement of chemical elements organized by their ",
+          " and ",
+          ". It was first created by ",
+          " in ",
+          ". The table is divided into ",
+          " groups and 7 periods."
+        ],
+        links: [
+          {
+            text: "atomic number",
+            isMistake: false,
+          },
+          {
+            text: "chemical properties",
+            isMistake: false,
+          },
+          {
+            text: "Isaac Newton",
+            isMistake: true,
+            correctAnswer: ["Dmitri Mendeleev", "Mendeleev", "Mendelev"]
+          },
+          {
+            text: "1869",
+            isMistake: false,
+          },
+          {
+            text: "18",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "3",
+        title: "Titanic",
+        content: [
+          "The RMS Titanic was an ",
+          " ocean liner that sank in the ",
+          " Ocean on its maiden voyage in ",
+          ". The ship was built by ",
+          " and was considered unsinkable. The disaster resulted in the deaths of approximately ",
+          " people."
+        ],
+        links: [
+          {
+            text: "American",
+            isMistake: true,
+            correctAnswer: ["British", "English"]
+          },
+          {
+            text: "Atlantic",
+            isMistake: false,
+          },
+          {
+            text: "1912",
+            isMistake: false,
+          },
+          {
+            text: "White Star Line",
+            isMistake: false,
+          },
+          {
+            text: "1,500",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "4",
+        title: "Photosynthesis",
+        content: [
+          "Photosynthesis is the process by which plants convert ",
+          " energy into chemical energy. The process requires ",
+          " and produces ",
+          " as a byproduct. The main pigment involved is ",
+          ". This process is essential for life on Earth as it provides ",
+          "."
+        ],
+        links: [
+          {
+            text: "solar",
+            isMistake: false,
+          },
+          {
+            text: "carbon dioxide",
+            isMistake: false,
+          },
+          {
+            text: "oxygen",
+            isMistake: false,
+          },
+          {
+            text: "carotene",
+            isMistake: true,
+            correctAnswer: ["chlorophyll", "chlorophyl", "chloryphyll", "chloryphyl"]
+          },
+          {
+            text: "food and oxygen",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "5",
+        title: "Magna Carta",
+        content: [
+          "The Magna Carta was a royal charter of rights agreed to by King ",
+          " of England in ",
+          ". The document was sealed at ",
+          ", near Windsor. Despite its eventual interpretation as a document of individual freedoms, Victorian historians concluded that the charter was an agreement between the king and ",
+          "."
+        ],
+        links: [
+          {
+            text: "Henry VIII",
+            isMistake: true,
+            correctAnswer: ["John", "King John", "John of England", "King John of england"]
+          },
+          {
+            text: "1215",
+            isMistake: false,
+          },
+          {
+            text: "Runnymede",
+            isMistake: false,
+          },
+          {
+            text: "the barons",
             isMistake: false,
           },
         ],
