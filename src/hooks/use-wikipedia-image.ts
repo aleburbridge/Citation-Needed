@@ -153,36 +153,64 @@ export const useWikipediaImage = (
           throw new Error("Article not found");
         }
 
-        let imageUrl = page.thumbnail?.source || null;
+        // First try to get the main article image (pageimage)
+        let imageUrl = null;
+        
+        if (page.pageimage) {
+          console.log(`Found main article image: ${page.pageimage}`);
+          imageUrl = await fetchImageFromFile(page.pageimage);
+          if (imageUrl) {
+            console.log(`Successfully retrieved main article image URL`);
+          } else {
+            console.log(`Failed to get URL for main article image: ${page.pageimage}`);
+          }
+        }
 
-        // If no pageimage thumbnail, try to get the first meaningful image from the article
+        // If no main image, try the thumbnail
+        if (!imageUrl && page.thumbnail?.source) {
+          console.log(`Using article thumbnail as fallback`);
+          imageUrl = page.thumbnail.source;
+        }
+
+        // Only if both main image and thumbnail fail, try other images
         if (!imageUrl && page.images && page.images.length > 0) {
+          console.log(`No main image found, searching through article images`);
           // Filter out common non-meaningful images
           const meaningfulImages = page.images.filter((img) => {
             const filename = img.title.toLowerCase();
+            // Only filter out clearly non-relevant images
             return (
               !filename.includes("commons-logo") &&
               !filename.includes("wikimedia") &&
               !filename.includes("edit-icon") &&
               !filename.includes("ambox") &&
               !filename.includes("stub") &&
-              !filename.includes("flag") &&
-              !filename.includes("symbol") &&
-              !filename.includes(".svg") && // Often icons or symbols
+              // Remove the SVG filter as some diagrams and technical drawings are SVGs
               (filename.includes(".jpg") ||
                 filename.includes(".jpeg") ||
-                filename.includes(".png"))
+                filename.includes(".png") ||
+                filename.includes(".svg"))
             );
           });
 
           // Try to get the URL for the first meaningful image
           if (meaningfulImages.length > 0) {
+            console.log(`Found ${meaningfulImages.length} potential images for "${normalizedTitle}"`);
             imageUrl = await fetchImageFromFile(meaningfulImages[0].title);
+            if (!imageUrl) {
+              console.log(`Failed to get URL for image: ${meaningfulImages[0].title}`);
+            }
+          } else {
+            console.log(`No meaningful images found for "${normalizedTitle}"`);
           }
         }
 
         // Cache the result (null if no image)
         imageCache.set(normalizedTitle, imageUrl);
+
+        if (!imageUrl) {
+          console.log(`No image found for "${normalizedTitle}" after all attempts`);
+        }
 
         setState({
           imageUrl,
@@ -193,6 +221,8 @@ export const useWikipediaImage = (
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : "Failed to fetch image";
+        
+        console.error(`Error fetching image for "${normalizedTitle}":`, error);
 
         // Cache the failure to avoid repeated failed requests
         imageCache.set(normalizedTitle, null);

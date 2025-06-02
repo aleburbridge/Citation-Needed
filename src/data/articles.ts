@@ -1263,6 +1263,971 @@ export const articleGroups: ArticleGroup[] = [
       },
     ],
   },
+  {
+    date: formatDate("2025-05-30"),
+    articles: [
+      {
+        id: "1",
+        title: "Ball Bearing",
+        content: [
+          "A ball bearing is a type of rolling-element bearing that uses ",
+          " to maintain the separation between the bearing races. The first modern ball bearing was patented by ",
+          " in ",
+          ". These bearings are essential in reducing ",
+          " and are used in everything from bicycles to space shuttles."
+        ],
+        links: [
+          {
+            text: "balls",
+            isMistake: false,
+          },
+          {
+            text: "Thomas Edison",
+            isMistake: true,
+            correctAnswer: ["Philip Vaughan", "Vaughan", "Vaughn", "phillip vaughan", "phillip vaughn"]
+          },
+          {
+            text: "1794",
+            isMistake: false,
+          },
+          {
+            text: "friction",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "2",
+        title: "Radar",
+        content: [
+          "Radar (",
+          ") is a detection system that uses ",
+          " to determine the distance, direction, or radial velocity of objects. A radar system consists of a ",
+          " producing electromagnetic waves in the ",
+          " domain, a ",
+          ", a ",
+          " (often the same antenna is used for transmitting and receiving) and a ",
+          " to determine properties of the objects."
+        ],
+        links: [
+          {
+            text: "Radio Detection and Ranging",
+            isMistake: false,
+          },
+          {
+            text: "radio waves",
+            isMistake: false,
+          },
+          {
+            text: "transistor",
+            isMistake: true,
+            correctAnswer: ["transmitter"]
+          },
+          {
+            text: "radio or microwaves",
+            isMistake: false,
+          },
+          {
+            text: "transmitting antenna",
+            isMistake: false,
+          },
+          {
+            text: "receiving antenna",
+            isMistake: false,
+          },
+          {
+            text: "receiver and processor",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "3",
+        title: "The Persistence of Memory",
+        content: [
+          "The Persistence of Memory is a famous painting by ",
+          " created in ",
+          ". The painting features melting ",
+          " in a desert landscape. It is considered one of the most recognizable works of ",
+          " art. The painting is currently housed in the ",
+          " in New York City."
+        ],
+        links: [
+          {
+            text: "Pablo Picasso",
+            isMistake: true,
+            correctAnswer: ["Salvador Dalí", "Dali", "Salvador Dali"]
+          },
+          {
+            text: "1931",
+            isMistake: false,
+          },
+          {
+            text: "pocket watches",
+            isMistake: false,
+          },
+          {
+            text: "Surrealist",
+            isMistake: false,
+          },
+          {
+            text: "Museum of Modern Art",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "4",
+        title: "Marie Antoinette",
+        content: [
+          "Marie Antoinette was the last ",
+          " of France before the French Revolution. Born in ",
+          " in 1755, she married King ",
+          " at the age of 14. She was executed by ",
+          " in 1793. Her famous quote 'Let them eat cake' was actually never said by her, but was attributed to her by ",
+          "."
+        ],
+        links: [
+          {
+            text: "queen",
+            isMistake: false,
+          },
+          {
+            text: "Austria",
+            isMistake: false,
+          },
+          {
+            text: "Louis VI",
+            isMistake: true,
+            correctAnswer: ["Louis XVI", "Louis the 16th", "Louis the Sixteenth", "Louis 16", "King Luis XVI", "King Louis 16", "Luis XVI", "Luis 16"]
+          },
+          {
+            text: "guillotine",
+            isMistake: false,
+          },
+          {
+            text: "Jean-Jacques Rousseau",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "5",
+        title: "Quantum Computing",
+        content: [
+          "Quantum computing is a type of computing that uses ",
+          " to perform calculations. Unlike classical computers that use bits, quantum computers use ",
+          ". The first quantum computer was built by ",
+          " in ",
+          ". These computers have the potential to solve certain problems much faster than classical computers, particularly in the field of ",
+          "."
+        ],
+        links: [
+          {
+            text: "quantum mechanics",
+            isMistake: false,
+          },
+          {
+            text: "quasibits",
+            isMistake: true,
+            correctAnswer: ["qubits", "cubits", "q bits", "qbits"]
+          },
+          {
+            text: "IBM",
+            isMistake: false,
+          },
+          {
+            text: "2019",
+            isMistake: false,
+          },
+          {
+            text: "cryptography",
+            isMistake: false,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    date: formatDate("2025-06-02"),
+    articles: [
+      {
+        id: "1",
+        title: "Steamboat",
+        content: [
+          "The first successful steamboat in America was the ",
+          ", which made its maiden voyage in ",
+          ". It carried passengers 150 miles from New York City to ",
+          ". along the ",
+          "."
+        ],
+        links: [
+          {
+            text: "Clermont",
+            isMistake: false,
+          },
+          {
+            text: "1807",
+            isMistake: false,
+          },
+          {
+            text: "Albany",
+            isMistake: false,
+          },
+          {
+            text: "East River",
+            correctAnswer: ["Hudson River", "Hudson", "hudsin"],
+            isMistake: true,
+          }
+        ],
+      },
+      {
+        id: "2",
+        title: "George Washington Carver",
+        content: [
+          "George Washington Carver was an ",
+          " who was originally born into slavery. He promoted alternative crops to ",
+          " especially due to its effects of ",
+          ". Carver was a ",
+          " at the Tuskegee Institute in ",
+          "."
+        ],
+        links: [
+          {
+            text: "agricultural scientist",
+            isMistake: false,
+          },
+          {
+            text: "cotton",
+            isMistake: false,
+          },
+          {
+            text: "soil depletion",
+            isMistake: false,
+          },
+          {
+            text: "dean",
+            isMistake: true,
+            correctAnswer: ["professor", "teacher"]
+          },
+          {
+            text: "Alabama",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "3",
+        title: "Odin",
+        content: [
+          "Odin is a widely revered god within ",
+          ". His prominent sons include Thor and ",
+          ". He lives in ",
+          ", the hall of the slain, and is often depicted with ",
+          "."
+        ],
+        links: [
+          {
+            text: "Greek mythology",
+            correctAnswer: ["Norse mythology", "norse", "nordic", "nordic mythology", "norse myth", "nordic myth"],
+            isMistake: true,
+          },
+          {
+            text: "Baldr",
+            isMistake: false,
+          },
+          {
+            text: "Valhalla",
+            isMistake: false,
+          },
+          {
+            text: "one eye",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "4",
+        title: "Blue Whale",
+        content: [
+          "Blue whales are marine  ",
+          " that weigh up to 199 tons. The blue whale is the ",
+          ". They communicate through ",
+          "that can travel for hundreds of miles. Their population was severely reduced by ",
+          " in the 20th century. They are currently classified as ",
+          "."
+        ],
+        links: [
+          {
+            text: "fish",
+            isMistake: true,
+            correctAnswer: ["mammals", "mammal", "mamals"]
+          },
+          {
+            text: "largest animal known ever to have existed",
+            isMistake: false,
+          },
+          {
+            text: "songs",
+            isMistake: false,
+          },
+          {
+            text: "whaling",
+            isMistake: false,
+          },
+          {
+            text: "threatened",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "5",
+        title: "Sahara Desert",
+        content: [
+          "The Sahara Desert is the ",
+          " largest desert in the world. Its name comes from the ",
+          " word for desert. It experiences temperatures that can reach up to ",
+          " degrees Celsius and receives less than ",
+          " inches of rain annually."
+        ],
+        links: [
+          {
+            text: "third",
+            isMistake: false,
+          },
+          {
+            text: "Aramaic",
+            isMistake: true,
+            correctAnswer: ["Arabic", "arab", "arabian"]
+          },
+          {
+            text: "50",
+            isMistake: false,
+          },
+          {
+            text: "3",
+            isMistake: false,
+          }
+        ],
+      }
+    ],
+  },
+  {
+    date: formatDate("2025-06-03"),
+    articles: [
+      {
+        id: "1",
+        title: "Buddhism",
+        content: [
+          "Buddhism was founded by ",
+          " in the ",
+          " century BCE. The religion is based on the Four Noble Truths and the ",
+          ". The three main branches are ",
+          ", Mahayana, and Vajrayana."
+        ],
+        links: [
+          {
+            text: "Siddhartha Gautama",
+            isMistake: false,
+          },
+          {
+            text: "6th",
+            isMistake: true,
+          },
+          {
+            text: "Sevenfold Path",
+            isMistake: true,
+            correctAnswer: ["Eightfold Path", "eightfold", "eight fold path", "eight-fold path", "eight-fold", "eightfold path"]
+          },
+          {
+            text: "Theravada",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "2",
+        title: "Quentin Tarantino",
+        content: [
+          "Quentin Tarantino is an ",
+          " filmmaker. His first major success was his ",
+          " feature film, ",
+          " a 1994 crime comedy-drama. He has won ",
+          " Academy Awards."
+        ],
+        links: [
+          {
+            text: "American",
+            isMistake: false,
+          },
+          {
+            text: "first",
+            isMistake: true,
+            correctAnswer: ["second", "2nd", "2"]
+          },
+          {
+            text: "Pulp Fiction",
+            isMistake: false,
+          },
+          {
+            text: "two",
+            isMistake: false,
+          },
+        ],
+      },
+      {
+        id: "3",
+        title: "Ivan the Terrible",
+        content: [
+          "Ivan IV, known as Ivan the Terrible, was the first ",
+          " of Russia. He ruled from ",
+          " to 1584. He established the ",
+          " and expanded Russia's territory. His reign was marked by ",
+          " and political repression."
+        ],
+        links: [
+          {
+            text: "King",
+            correctAnswer: ["Tsar"],
+            isMistake: true,
+          },
+          {
+            text: "1547",
+            isMistake: false,
+          },
+          {
+            text: "Oprichnina",
+            isMistake: false,
+          },
+          {
+            text: "paranoia",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "4",
+        title: "Plato",
+        content: [
+          "Plato was an ancient Greek philosopher who founded the ",
+          " in Athens. He was a student of ",
+          " and teacher of Aristotle. His most famous work is ",
+          ". He wrote about the concept of ",
+          ", which he described as perfect, eternal forms."
+        ],
+        links: [
+          {
+            text: "Academy",
+            isMistake: false,
+          },
+          {
+            text: "Socrates",
+            isMistake: false,
+          },
+          {
+            text: "The Symposium",
+            correctAnswer: ["The Republic"],
+            isMistake: true,
+          },
+          {
+            text: "Forms",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "5",
+        title: "Great Wall of China",
+        content: [
+          "The Great Wall of China was built primarily during the ",
+          " Dynasty. It stretches for approximately ",
+          " kilometers. The wall was constructed using materials like ",
+          " and stone. It was built to protect against invasions from ",
+          " tribes."
+        ],
+        links: [
+          {
+            text: "Qin",
+            correctAnswer: ["Ming"],
+            isMistake: true,
+          },
+          {
+            text: "21,196",
+            isMistake: false,
+          },
+          {
+            text: "brick",
+            isMistake: false,
+          },
+          {
+            text: "Mongol",
+            isMistake: false,
+          }
+        ],
+      }
+    ],
+  },
+  {
+    date: formatDate("2025-06-04"),
+    articles: [
+      {
+        id: "1",
+        title: "Steamboat",
+        content: [
+          "The steamboat revolutionized ",
+          " transportation in the 19th century. The first steamboat to cross the ",
+          " was the Savannah in 1819. Steamboats were crucial for ",
+          " and trade. They were eventually replaced by ",
+          " powered vessels."
+        ],
+        links: [
+          {
+            text: "ocean",
+            correctAnswer: ["river"],
+            isMistake: true,
+          },
+          {
+            text: "Atlantic Ocean",
+            isMistake: false,
+          },
+          {
+            text: "commerce",
+            isMistake: false,
+          },
+          {
+            text: "diesel",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "2",
+        title: "George Washington Carver",
+        content: [
+          "Carver was born in ",
+          " during the Civil War. He earned his master's degree in ",
+          ". He developed crop rotation methods using ",
+          ". He was the first African American to receive a ",
+          " degree from Iowa State University."
+        ],
+        links: [
+          {
+            text: "Diamond, Missouri",
+            isMistake: false,
+          },
+          {
+            text: "botany",
+            correctAnswer: ["agricultural science"],
+            isMistake: true,
+          },
+          {
+            text: "legumes",
+            isMistake: false,
+          },
+          {
+            text: "master's",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "3",
+        title: "Odin",
+        content: [
+          "Odin is associated with ",
+          " and poetry. He has two wolves named ",
+          " and Geri. He is the ruler of ",
+          ". He is often accompanied by the ",
+          " Valkyries."
+        ],
+        links: [
+          {
+            text: "knowledge",
+            correctAnswer: ["wisdom"],
+            isMistake: true,
+          },
+          {
+            text: "Freki",
+            isMistake: false,
+          },
+          {
+            text: "Asgard",
+            isMistake: false,
+          },
+          {
+            text: "female",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "4",
+        title: "Blue Whale",
+        content: [
+          "Blue whales can live up to ",
+          " years. They give birth to calves that are about ",
+          " feet long. Their tongue alone can weigh as much as an ",
+          ". They are found in all oceans except the ",
+          "."
+        ],
+        links: [
+          {
+            text: "70",
+            correctAnswer: ["90"],
+            isMistake: true,
+          },
+          {
+            text: "25",
+            isMistake: false,
+          },
+          {
+            text: "elephant",
+            isMistake: false,
+          },
+          {
+            text: "Arctic",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "5",
+        title: "Sahara Desert",
+        content: [
+          "The Sahara Desert is home to the ",
+          " Mountains. It contains the world's largest ",
+          " deposit. The desert is expanding at a rate of about ",
+          " kilometers per year. It is bordered by the ",
+          " to the north."
+        ],
+        links: [
+          {
+            text: "Atlas",
+            isMistake: false,
+          },
+          {
+            text: "oil",
+            correctAnswer: ["fossil water"],
+            isMistake: true,
+          },
+          {
+            text: "0.8",
+            isMistake: false,
+          },
+          {
+            text: "Mediterranean Sea",
+            isMistake: false,
+          }
+        ],
+      }
+    ],
+  },
+  {
+    date: formatDate("2025-06-05"),
+    articles: [
+      {
+        id: "1",
+        title: "Buddhism",
+        content: [
+          "Buddhism teaches the concept of ",
+          ", the cycle of death and rebirth. The ultimate goal is to achieve ",
+          ", or enlightenment. The religion spread from ",
+          " to other parts of Asia. The ",
+          " is a key symbol in Buddhism."
+        ],
+        links: [
+          {
+            text: "reincarnation",
+            correctAnswer: ["samsara"],
+            isMistake: true,
+          },
+          {
+            text: "nirvana",
+            isMistake: false,
+          },
+          {
+            text: "India",
+            isMistake: false,
+          },
+          {
+            text: "dharma wheel",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "2",
+        title: "Quentin Tarantino",
+        content: [
+          "Tarantino's films often feature ",
+          " soundtracks and ",
+          " camera angles. He has directed ",
+          " feature films. His movies frequently include ",
+          " and references to other films."
+        ],
+        links: [
+          {
+            text: "eclectic",
+            isMistake: false,
+          },
+          {
+            text: "high",
+            correctAnswer: ["low"],
+            isMistake: true,
+          },
+          {
+            text: "nine",
+            isMistake: false,
+          },
+          {
+            text: "homages",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "3",
+        title: "Ivan the Terrible",
+        content: [
+          "Ivan the Terrible's first wife was ",
+          ". He established the first ",
+          " in Russia. His son, ",
+          ", died under mysterious circumstances. He was known for his ",
+          " and violent temper."
+        ],
+        links: [
+          {
+            text: "Anastasia Romanovna",
+            isMistake: false,
+          },
+          {
+            text: "university",
+            correctAnswer: ["printing press"],
+            isMistake: true,
+          },
+          {
+            text: "Ivan Ivanovich",
+            isMistake: false,
+          },
+          {
+            text: "paranoia",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "4",
+        title: "Plato",
+        content: [
+          "Plato's philosophical works are written in the form of ",
+          ". He believed in the existence of a ",
+          " world of perfect forms. His most famous student was ",
+          ". He wrote about the ideal ",
+          " in 'The Republic'."
+        ],
+        links: [
+          {
+            text: "dialogues",
+            isMistake: false,
+          },
+          {
+            text: "spiritual",
+            correctAnswer: ["ideal"],
+            isMistake: true,
+          },
+          {
+            text: "Aristotle",
+            isMistake: false,
+          },
+          {
+            text: "society",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "5",
+        title: "Great Wall of China",
+        content: [
+          "The Great Wall was built using a mixture of ",
+          ", stone, and wood. It was constructed by ",
+          " of workers. The wall includes ",
+          " and watchtowers. It is visible from ",
+          " on a clear day."
+        ],
+        links: [
+          {
+            text: "rammed earth",
+            isMistake: false,
+          },
+          {
+            text: "thousands",
+            correctAnswer: ["millions"],
+            isMistake: true,
+          },
+          {
+            text: "fortresses",
+            isMistake: false,
+          },
+          {
+            text: "space",
+            isMistake: false,
+          }
+        ],
+      }
+    ],
+  },
+  {
+    date: formatDate("2025-06-06"),
+    articles: [
+      {
+        id: "1",
+        title: "Steamboat",
+        content: [
+          "The steamboat was a revolutionary watercraft powered by ",
+          " engines. The first commercially successful steamboat was built by ",
+          " in ",
+          ". These vessels transformed river transportation by allowing boats to travel ",
+          " against strong currents."
+        ],
+        links: [
+          {
+            text: "steam",
+            isMistake: false,
+          },
+          {
+            text: "James Watt",
+            correctAnswer: ["Robert Fulton"],
+            isMistake: true,
+          },
+          {
+            text: "1807",
+            isMistake: false,
+          },
+          {
+            text: "upstream",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "2",
+        title: "George Washington Carver",
+        content: [
+          "George Washington Carver was an agricultural scientist who developed hundreds of products using ",
+          ". Born into slavery in ",
+          ", he became a professor at ",
+          ". His work helped revolutionize farming practices in the American South."
+        ],
+        links: [
+          {
+            text: "peanuts",
+            isMistake: false,
+          },
+          {
+            text: "Alabama",
+            correctAnswer: ["Missouri"],
+            isMistake: true,
+          },
+          {
+            text: "Tuskegee Institute",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "3",
+        title: "Odin",
+        content: [
+          "Odin is the chief god in ",
+          " mythology. He is known for his wisdom, having sacrificed his ",
+          " to gain knowledge. He rides an eight-legged horse named ",
+          " and is accompanied by two ravens, ",
+          " and Muninn."
+        ],
+        links: [
+          {
+            text: "Norse",
+            isMistake: false,
+          },
+          {
+            text: "hand",
+            correctAnswer: ["eye"],
+            isMistake: true,
+          },
+          {
+            text: "Sleipnir",
+            isMistake: false,
+          },
+          {
+            text: "Huginn",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "4",
+        title: "Blue Whale",
+        content: [
+          "The blue whale is the largest animal known to have ever existed, reaching lengths of up to ",
+          " feet. These marine mammals feed primarily on ",
+          ". They can be found in all the world's oceans except the ",
+          ". Their heart alone can weigh as much as a ",
+          "."
+        ],
+        links: [
+          {
+            text: "80",
+            correctAnswer: ["100"],
+            isMistake: true,
+          },
+          {
+            text: "krill",
+            isMistake: false,
+          },
+          {
+            text: "Arctic",
+            isMistake: false,
+          },
+          {
+            text: "small car",
+            isMistake: false,
+          }
+        ],
+      },
+      {
+        id: "5",
+        title: "Sahara Desert",
+        content: [
+          "The Sahara Desert is the world's largest hot desert, covering approximately ",
+          " square miles. It spans across ",
+          " countries in North Africa. The desert's highest point is ",
+          " in Chad. Despite its arid conditions, the Sahara was once a ",
+          " environment."
+        ],
+        links: [
+          {
+            text: "3.6 million",
+            isMistake: false,
+          },
+          {
+            text: "9",
+            correctAnswer: ["11"],
+            isMistake: true,
+          },
+          {
+            text: "Emi Koussi",
+            isMistake: false,
+          },
+          {
+            text: "lush",
+            isMistake: false,
+          }
+        ],
+      }
+    ],
+  },
 ];
 
 // === EXPORTED FUNCTIONS ===
